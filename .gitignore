@@ -40,6 +40,9 @@ yarn-error.log*
 docking_token.txt
 vercel_token.txt
 
+# claude code session state
+.claude/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
