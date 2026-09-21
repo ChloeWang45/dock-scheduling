@@ -34,11 +34,13 @@ export default function BerthDayGrid({
   days,
   berths,
   blocks,
+  editable,
 }: {
   view: ViewType;
   days: string[];
   berths: BerthRow[];
   blocks: OccupancyBlock[];
+  editable: boolean;
 }) {
   const dayWidth = dayWidthFor(view);
   const gridCols = `${LABEL_WIDTH}px repeat(${days.length}, ${dayWidth}px)`;
@@ -93,20 +95,29 @@ export default function BerthDayGrid({
                 className="relative"
                 style={{ gridColumn: `2 / span ${days.length}`, height: rowHeight }}
               >
-                {/* Click-to-book day backgrounds */}
+                {/* Click-to-book day backgrounds (staff/admin only) */}
                 <div
                   className="absolute inset-0 grid"
                   style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}
                 >
-                  {days.map((day) => (
-                    <Link
-                      key={day}
-                      href={`/bookings/new?berthId=${berth.id}&date=${day}`}
-                      className={`border-l border-zinc-100 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-900/60 ${
-                        day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
-                      }`}
-                    />
-                  ))}
+                  {days.map((day) =>
+                    editable ? (
+                      <Link
+                        key={day}
+                        href={`/bookings/new?berthId=${berth.id}&date=${day}`}
+                        className={`border-l border-zinc-100 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-900/60 ${
+                          day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
+                        }`}
+                      />
+                    ) : (
+                      <div
+                        key={day}
+                        className={`border-l border-zinc-100 dark:border-zinc-900 ${
+                          day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
+                        }`}
+                      />
+                    ),
+                  )}
                 </div>
 
                 {/* Occupancy bars */}
@@ -119,23 +130,24 @@ export default function BerthDayGrid({
                   const left = (startIdx / days.length) * 100;
                   const width = ((endIdx - startIdx + 1) / days.length) * 100;
 
-                  return (
-                    <Link
-                      key={block.id}
-                      href={block.href}
-                      title={block.title}
-                      className={`absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm ${block.colorClass} ${
-                        block.ringed ? "ring-2 ring-red-500" : ""
-                      }`}
-                      style={{
-                        left: `${left}%`,
-                        width: `${width}%`,
-                        top: laneOf[i] * LANE_HEIGHT + 3,
-                        height: LANE_HEIGHT - 4,
-                      }}
-                    >
+                  const barStyle = {
+                    left: `${left}%`,
+                    width: `${width}%`,
+                    top: laneOf[i] * LANE_HEIGHT + 3,
+                    height: LANE_HEIGHT - 4,
+                  };
+                  const barClass = `absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm ${block.colorClass} ${
+                    block.ringed ? "ring-2 ring-red-500" : ""
+                  }`;
+
+                  return editable ? (
+                    <Link key={block.id} href={block.href} title={block.title} className={barClass} style={barStyle}>
                       <span className="truncate">{block.label}</span>
                     </Link>
+                  ) : (
+                    <div key={block.id} title={block.title} className={barClass} style={barStyle}>
+                      <span className="truncate">{block.label}</span>
+                    </div>
                   );
                 })}
               </div>

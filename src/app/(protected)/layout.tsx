@@ -60,6 +60,14 @@ export default async function ProtectedLayout({
           >
             Closures
           </Link>
+          {session.user.role === "admin" && (
+            <Link
+              href="/admin/users"
+              className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+            >
+              Users
+            </Link>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <Link

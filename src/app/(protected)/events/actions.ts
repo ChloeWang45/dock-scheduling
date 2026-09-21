@@ -3,16 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { events } from "@/db/schema";
 import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
-
-async function requireUser() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  return session.user;
-}
+import { requireStaff } from "@/lib/authz";
 
 export async function checkEventConflicts(input: {
   berthId: string;
@@ -20,7 +14,7 @@ export async function checkEventConflicts(input: {
   endDate: string;
   excludeEventId?: string;
 }): Promise<ConflictIssue[]> {
-  await requireUser();
+  await requireStaff();
   if (!input.berthId || !input.startDate || !input.endDate) return [];
   return checkBerthConflicts({
     berthId: input.berthId,
@@ -69,7 +63,7 @@ export async function createEvent(
   _prevState: EventFormState,
   formData: FormData,
 ): Promise<EventFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const event = eventFromForm(formData, user.id);
   const error = await validationError(event);
   if (error) return { error };
@@ -84,7 +78,7 @@ export async function updateEvent(
   _prevState: EventFormState,
   formData: FormData,
 ): Promise<EventFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const event = eventFromForm(formData, user.id);
   const error = await validationError(event, id);
   if (error) return { error };
@@ -96,7 +90,7 @@ export async function updateEvent(
 }
 
 export async function cancelEvent(id: string) {
-  await requireUser();
+  await requireStaff();
   await db.update(events).set({ active: false }).where(eq(events.id, id));
   revalidatePath("/events");
 }

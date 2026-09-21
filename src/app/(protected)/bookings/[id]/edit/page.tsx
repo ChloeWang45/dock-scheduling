@@ -3,6 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, bookings, vessels } from "@/db/schema";
 import BookingForm from "@/components/BookingForm";
+import { requireStaff } from "@/lib/authz";
 import { updateBooking } from "../../actions";
 
 export default async function EditBookingPage({
@@ -10,6 +11,7 @@ export default async function EditBookingPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireStaff();
   const { id } = await params;
   const [[booking], allBerths, allVessels] = await Promise.all([
     db.select().from(bookings).where(eq(bookings.id, id)).limit(1),

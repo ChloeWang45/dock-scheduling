@@ -2,6 +2,7 @@ import { asc } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, vessels } from "@/db/schema";
 import BookingForm from "@/components/BookingForm";
+import { requireStaff } from "@/lib/authz";
 import { createBooking } from "../actions";
 
 export default async function NewBookingPage({
@@ -9,6 +10,7 @@ export default async function NewBookingPage({
 }: {
   searchParams: Promise<{ berthId?: string; date?: string }>;
 }) {
+  await requireStaff();
   const { berthId, date } = await searchParams;
   const [allBerths, allVessels] = await Promise.all([
     db.select().from(berths).orderBy(asc(berths.name)),

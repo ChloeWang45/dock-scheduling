@@ -3,16 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { vessels, vesselType } from "@/db/schema";
+import { requireStaff } from "@/lib/authz";
 
 type VesselType = (typeof vesselType.enumValues)[number];
-
-async function requireUser() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-}
 
 function toNullableNumber(value: FormDataEntryValue | null): number | null {
   if (value === null || value === "") return null;
@@ -44,21 +39,21 @@ function vesselFromForm(formData: FormData) {
 }
 
 export async function createVessel(formData: FormData) {
-  await requireUser();
+  await requireStaff();
   await db.insert(vessels).values(vesselFromForm(formData));
   revalidatePath("/vessels");
   redirect("/vessels");
 }
 
 export async function updateVessel(id: string, formData: FormData) {
-  await requireUser();
+  await requireStaff();
   await db.update(vessels).set(vesselFromForm(formData)).where(eq(vessels.id, id));
   revalidatePath("/vessels");
   redirect("/vessels");
 }
 
 export async function setVesselActive(id: string, active: boolean) {
-  await requireUser();
+  await requireStaff();
   await db.update(vessels).set({ active }).where(eq(vessels.id, id));
   revalidatePath("/vessels");
 }

@@ -3,6 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, closures } from "@/db/schema";
 import ClosureForm from "@/components/ClosureForm";
+import { requireStaff } from "@/lib/authz";
 import { updateClosure } from "../../actions";
 
 export default async function EditClosurePage({
@@ -10,6 +11,7 @@ export default async function EditClosurePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireStaff();
   const { id } = await params;
   const [[closure], allBerths] = await Promise.all([
     db.select().from(closures).where(eq(closures.id, id)).limit(1),

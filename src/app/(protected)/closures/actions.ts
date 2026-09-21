@@ -3,16 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { closures } from "@/db/schema";
 import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
-
-async function requireUser() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  return session.user;
-}
+import { requireStaff } from "@/lib/authz";
 
 export async function checkClosureConflicts(input: {
   berthId: string;
@@ -20,7 +14,7 @@ export async function checkClosureConflicts(input: {
   endDate: string;
   excludeClosureId?: string;
 }): Promise<ConflictIssue[]> {
-  await requireUser();
+  await requireStaff();
   if (!input.berthId || !input.startDate || !input.endDate) return [];
   return checkBerthConflicts({
     berthId: input.berthId,
@@ -67,7 +61,7 @@ export async function createClosure(
   _prevState: ClosureFormState,
   formData: FormData,
 ): Promise<ClosureFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const closure = closureFromForm(formData, user.id);
   const error = await validationError(closure);
   if (error) return { error };
@@ -82,7 +76,7 @@ export async function updateClosure(
   _prevState: ClosureFormState,
   formData: FormData,
 ): Promise<ClosureFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const closure = closureFromForm(formData, user.id);
   const error = await validationError(closure, id);
   if (error) return { error };
@@ -94,7 +88,7 @@ export async function updateClosure(
 }
 
 export async function cancelClosure(id: string) {
-  await requireUser();
+  await requireStaff();
   await db.update(closures).set({ active: false }).where(eq(closures.id, id));
   revalidatePath("/closures");
 }

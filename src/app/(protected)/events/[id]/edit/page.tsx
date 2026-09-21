@@ -3,6 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, events } from "@/db/schema";
 import EventForm from "@/components/EventForm";
+import { requireStaff } from "@/lib/authz";
 import { updateEvent } from "../../actions";
 
 export default async function EditEventPage({
@@ -10,6 +11,7 @@ export default async function EditEventPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireStaff();
   const { id } = await params;
   const [[event], allBerths] = await Promise.all([
     db.select().from(events).where(eq(events.id, id)).limit(1),

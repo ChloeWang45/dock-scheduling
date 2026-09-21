@@ -1,6 +1,8 @@
 import { and, asc, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, bookings, closures, events, users, vessels } from "@/db/schema";
+import { auth } from "@/auth";
+import { canWrite } from "@/lib/authz";
 import { getVisibleRange, todayISO, type ViewType } from "@/lib/calendar-dates";
 import { formatStaffName } from "@/lib/user-display";
 import CalendarNav from "@/components/calendar/CalendarNav";
@@ -21,6 +23,8 @@ export default async function CalendarPage({
 }: {
   searchParams: Promise<{ view?: string; date?: string }>;
 }) {
+  const session = await auth();
+  const editable = canWrite(session!.user.role);
   const params = await searchParams;
   const view: ViewType = VALID_VIEWS.includes(params.view as ViewType)
     ? (params.view as ViewType)
@@ -138,7 +142,7 @@ export default async function CalendarPage({
       {view === "year" ? (
         <YearGrid year={anchor.slice(0, 4)} berths={allBerths} blocks={blocks} />
       ) : (
-        <BerthDayGrid view={view} days={days} berths={allBerths} blocks={blocks} />
+        <BerthDayGrid view={view} days={days} berths={allBerths} blocks={blocks} editable={editable} />
       )}
     </div>
   );

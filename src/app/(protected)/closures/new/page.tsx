@@ -2,6 +2,7 @@ import { asc } from "drizzle-orm";
 import { db } from "@/db";
 import { berths } from "@/db/schema";
 import ClosureForm from "@/components/ClosureForm";
+import { requireStaff } from "@/lib/authz";
 import { createClosure } from "../actions";
 
 export default async function NewClosurePage({
@@ -9,6 +10,7 @@ export default async function NewClosurePage({
 }: {
   searchParams: Promise<{ berthId?: string; date?: string }>;
 }) {
+  await requireStaff();
   const { berthId, date } = await searchParams;
   const allBerths = await db.select().from(berths).orderBy(asc(berths.name));
 

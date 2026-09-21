@@ -3,17 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { berths, bookings, vessels } from "@/db/schema";
 import { checkFit, type FitIssue } from "@/lib/booking-validation";
 import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
-
-async function requireUser() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  return session.user;
-}
+import { requireStaff } from "@/lib/authz";
 
 export type BookingIssues = {
   conflicts: ConflictIssue[];
@@ -27,7 +21,7 @@ export async function checkBookingIssues(input: {
   endDate: string;
   excludeBookingId?: string;
 }): Promise<BookingIssues> {
-  await requireUser();
+  await requireStaff();
   if (!input.berthId || !input.vesselId || !input.startDate || !input.endDate) {
     return { conflicts: [], fitIssues: [] };
   }
@@ -96,7 +90,7 @@ export async function createBooking(
   _prevState: BookingFormState,
   formData: FormData,
 ): Promise<BookingFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const booking = bookingFromForm(formData, user.id);
   const error = await validationError(booking);
   if (error) return { error };
@@ -111,7 +105,7 @@ export async function updateBooking(
   _prevState: BookingFormState,
   formData: FormData,
 ): Promise<BookingFormState> {
-  const user = await requireUser();
+  const user = await requireStaff();
   const booking = bookingFromForm(formData, user.id);
   const error = await validationError(booking, id);
   if (error) return { error };
@@ -123,7 +117,7 @@ export async function updateBooking(
 }
 
 export async function cancelBooking(id: string) {
-  await requireUser();
+  await requireStaff();
   await db.update(bookings).set({ status: "cancelled" }).where(eq(bookings.id, id));
   revalidatePath("/bookings");
 }

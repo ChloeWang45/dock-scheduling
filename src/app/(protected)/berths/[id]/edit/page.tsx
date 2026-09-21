@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { berths } from "@/db/schema";
 import BerthForm from "@/components/BerthForm";
+import { requireStaff } from "@/lib/authz";
 import { updateBerth } from "../../actions";
 
 export default async function EditBerthPage({
@@ -10,6 +11,7 @@ export default async function EditBerthPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireStaff();
   const { id } = await params;
   const [berth] = await db.select().from(berths).where(eq(berths.id, id)).limit(1);
   if (!berth) notFound();

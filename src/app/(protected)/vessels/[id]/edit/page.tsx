@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { vessels } from "@/db/schema";
 import VesselForm from "@/components/VesselForm";
+import { requireStaff } from "@/lib/authz";
 import { updateVessel } from "../../actions";
 
 export default async function EditVesselPage({
@@ -10,6 +11,7 @@ export default async function EditVesselPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireStaff();
   const { id } = await params;
   const [vessel] = await db
     .select()
