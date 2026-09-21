@@ -84,8 +84,15 @@ async function issuesFor(
   vesselId: string,
   startDate: string,
   endDate: string,
+  excludeBookingId?: string,
 ): Promise<string[]> {
-  const { conflicts, fitIssues } = await checkBookingIssues({ berthId, vesselId, startDate, endDate });
+  const { conflicts, fitIssues } = await checkBookingIssues({
+    berthId,
+    vesselId,
+    startDate,
+    endDate,
+    excludeBookingId,
+  });
   const violations = fitIssues.filter((f) => f.status === "violation");
   return [...conflicts.map((c) => c.message), ...violations.map((f) => f.message)];
 }
@@ -175,7 +182,13 @@ export async function updateBooking(
   const booking = bookingFromForm(formData, user.id);
   const scope = String(formData.get("scope") ?? "this");
 
-  const issues = await issuesFor(booking.berthId, booking.vesselId, booking.startDate, booking.endDate);
+  const issues = await issuesFor(
+    booking.berthId,
+    booking.vesselId,
+    booking.startDate,
+    booking.endDate,
+    id,
+  );
   if (issues.length > 0 && !(booking.overridden && booking.overrideNote)) {
     return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
   }

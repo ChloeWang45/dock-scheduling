@@ -56,8 +56,13 @@ function recurrenceRuleFromForm(formData: FormData): RecurrenceRule | null {
   return { frequency, interval, endType: "count", endCount };
 }
 
-async function issuesFor(berthId: string, startDate: string, endDate: string): Promise<string[]> {
-  const conflicts = await checkEventConflicts({ berthId, startDate, endDate });
+async function issuesFor(
+  berthId: string,
+  startDate: string,
+  endDate: string,
+  excludeEventId?: string,
+): Promise<string[]> {
+  const conflicts = await checkEventConflicts({ berthId, startDate, endDate, excludeEventId });
   return conflicts.map((c) => c.message);
 }
 
@@ -146,7 +151,7 @@ export async function updateEvent(
   const event = eventFromForm(formData, user.id);
   const scope = String(formData.get("scope") ?? "this");
 
-  const issues = await issuesFor(event.berthId, event.startDate, event.endDate);
+  const issues = await issuesFor(event.berthId, event.startDate, event.endDate, id);
   if (issues.length > 0 && !(event.overridden && event.overrideNote)) {
     return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
   }
