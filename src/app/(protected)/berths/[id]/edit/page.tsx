@@ -1,0 +1,25 @@
+import { notFound } from "next/navigation";
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
+import { berths } from "@/db/schema";
+import BerthForm from "@/components/BerthForm";
+import { updateBerth } from "../../actions";
+
+export default async function EditBerthPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [berth] = await db.select().from(berths).where(eq(berths.id, id)).limit(1);
+  if (!berth) notFound();
+
+  return (
+    <div>
+      <h1 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        Edit Berth
+      </h1>
+      <BerthForm berth={berth} action={updateBerth.bind(null, id)} />
+    </div>
+  );
+}
