@@ -36,6 +36,12 @@ export default async function ProtectedLayout({
           >
             Vessels
           </Link>
+          <Link
+            href="/bookings"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            Bookings
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-zinc-500">{session.user.email}</span>
