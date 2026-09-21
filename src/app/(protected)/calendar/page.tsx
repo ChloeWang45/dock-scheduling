@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, bookings, closures, events, users, vessels } from "@/db/schema";
@@ -5,10 +6,24 @@ import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { getVisibleRange, todayISO, type ViewType } from "@/lib/calendar-dates";
 import { formatStaffName } from "@/lib/user-display";
+import { getScheduleEntries, type EntryType } from "@/lib/schedule-entries";
 import CalendarNav from "@/components/calendar/CalendarNav";
+import CalendarSearch from "@/components/calendar/CalendarSearch";
 import BerthDayGrid, { type OccupancyBlock } from "@/components/calendar/BerthDayGrid";
 import YearGrid from "@/components/calendar/YearGrid";
 import Legend from "@/components/calendar/Legend";
+
+const TYPE_LABELS: Record<EntryType, string> = {
+  booking: "Booking",
+  event: "Event",
+  closure: "Closure",
+};
+
+const TYPE_BADGE_CLASS: Record<EntryType, string> = {
+  booking: "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300",
+  event: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300",
+  closure: "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300",
+};
 
 const VALID_VIEWS: ViewType[] = ["day", "week", "month", "year"];
 
@@ -21,7 +36,7 @@ const BOOKING_STATUS_CLASS: Record<string, string> = {
 export default async function CalendarPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; date?: string }>;
+  searchParams: Promise<{ view?: string; date?: string; q?: string }>;
 }) {
   const session = await auth();
   const editable = canWrite(session!.user.role);
@@ -30,6 +45,95 @@ export default async function CalendarPage({
     ? (params.view as ViewType)
     : "week";
   const anchor = params.date && /^\d{4}-\d{2}-\d{2}$/.test(params.date) ? params.date : todayISO();
+  const q = (params.q ?? "").trim();
+
+  if (q) {
+    const allEntries = await getScheduleEntries();
+    const needle = q.toLowerCase();
+    const matches = allEntries
+      .filter(
+        (e) =>
+          e.title.toLowerCase().includes(needle) ||
+          (e.subtitle?.toLowerCase().includes(needle) ?? false) ||
+          e.berthName.toLowerCase().includes(needle) ||
+          e.statusLabel.toLowerCase().includes(needle),
+      )
+      .sort((a, b) => b.startDate.localeCompare(a.startDate));
+
+    return (
+      <div>
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">Calendar</h1>
+        </div>
+        <CalendarSearch q={q} view={view} anchor={anchor} />
+        <p className="mb-4 text-sm text-zinc-500">
+          {matches.length === 0
+            ? `No bookings, events, or closures match "${q}".`
+            : `${matches.length} result${matches.length === 1 ? "" : "s"} for "${q}".`}
+        </p>
+        {matches.length > 0 && (
+          <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+                <tr>
+                  <th className="px-4 py-2 font-medium">Type</th>
+                  <th className="px-4 py-2 font-medium">Berth</th>
+                  <th className="px-4 py-2 font-medium">What</th>
+                  <th className="px-4 py-2 font-medium">Dates</th>
+                  <th className="px-4 py-2 font-medium">Status</th>
+                  <th className="px-4 py-2 font-medium"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                {matches.map((entry) => (
+                  <tr key={`${entry.type}-${entry.id}`} className="text-zinc-800 dark:text-zinc-200">
+                    <td className="px-4 py-2">
+                      <span
+                        className={`rounded px-2 py-0.5 text-xs font-medium ${TYPE_BADGE_CLASS[entry.type]}`}
+                      >
+                        {TYPE_LABELS[entry.type]}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">{entry.berthName}</td>
+                    <td className="px-4 py-2">
+                      {entry.title}
+                      {entry.subtitle && <span className="text-zinc-500"> ({entry.subtitle})</span>}
+                    </td>
+                    <td className="px-4 py-2">
+                      {entry.startDate === entry.endDate
+                        ? entry.startDate
+                        : `${entry.startDate} – ${entry.endDate}`}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className={entry.statusClass}>{entry.statusLabel}</span>
+                    </td>
+                    <td className="px-4 py-2 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <Link
+                          href={`/calendar?view=day&date=${entry.startDate}`}
+                          className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+                        >
+                          View in calendar
+                        </Link>
+                        {editable && (
+                          <Link
+                            href={entry.editHref}
+                            className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+                          >
+                            Edit
+                          </Link>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const { start, end, days } = getVisibleRange(view, anchor);
 
@@ -137,6 +241,7 @@ export default async function CalendarPage({
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">Calendar</h1>
       </div>
+      <CalendarSearch q={q} view={view} anchor={anchor} />
       <CalendarNav view={view} anchor={anchor} />
       <Legend />
       {view === "year" ? (
