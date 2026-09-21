@@ -46,3 +46,5 @@ vercel_token.txt
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
