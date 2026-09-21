@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { BerthRow, BookingBlock } from "./BerthDayGrid";
+import type { BerthRow, OccupancyBlock } from "./BerthDayGrid";
 
 const MONTH_LABELS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -27,11 +27,11 @@ function intensityClass(count: number) {
 export default function YearGrid({
   year,
   berths,
-  bookings,
+  blocks,
 }: {
   year: string;
   berths: BerthRow[];
-  bookings: BookingBlock[];
+  blocks: OccupancyBlock[];
 }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
@@ -54,7 +54,7 @@ export default function YearGrid({
               </td>
               {MONTH_LABELS.map((_, monthIndex) => {
                 const [start, end] = monthRange(year, monthIndex);
-                const count = bookings.filter(
+                const count = blocks.filter(
                   (b) => b.berthId === berth.id && b.startDate <= end && b.endDate >= start,
                 ).length;
                 return (

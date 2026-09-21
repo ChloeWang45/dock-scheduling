@@ -11,6 +11,12 @@ export default function Legend() {
         <span className="h-3 w-3 rounded-sm bg-zinc-400" /> Cancelled
       </span>
       <span className="flex items-center gap-1.5">
+        <span className="h-3 w-3 rounded-sm bg-blue-500" /> Event
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className="h-3 w-3 rounded-sm bg-red-700" /> Closure
+      </span>
+      <span className="flex items-center gap-1.5">
         <span className="h-3 w-3 rounded-sm border-2 border-red-500 bg-transparent" /> Overridden
       </span>
     </div>

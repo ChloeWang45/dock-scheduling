@@ -6,7 +6,8 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { berths, bookings, vessels } from "@/db/schema";
-import { checkFit, checkOverlap, type ConflictIssue, type FitIssue } from "@/lib/booking-validation";
+import { checkFit, type FitIssue } from "@/lib/booking-validation";
+import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
 
 async function requireUser() {
   const session = await auth();
@@ -36,11 +37,13 @@ export async function checkBookingIssues(input: {
   if (!berth || !vessel) return { conflicts: [], fitIssues: [] };
 
   const [conflicts, fitIssues] = await Promise.all([
-    checkOverlap({
+    checkBerthConflicts({
       berthId: input.berthId,
       startDate: input.startDate,
       endDate: input.endDate,
-      excludeBookingId: input.excludeBookingId,
+      excludeSource: input.excludeBookingId
+        ? { table: "bookings", id: input.excludeBookingId }
+        : undefined,
     }),
     Promise.resolve(checkFit(vessel, berth)),
   ]);

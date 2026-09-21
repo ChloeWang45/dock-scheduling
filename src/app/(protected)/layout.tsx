@@ -48,6 +48,18 @@ export default async function ProtectedLayout({
           >
             Bookings
           </Link>
+          <Link
+            href="/events"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            Events
+          </Link>
+          <Link
+            href="/closures"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            Closures
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <Link

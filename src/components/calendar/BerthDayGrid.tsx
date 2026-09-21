@@ -4,26 +4,24 @@ import { formatDayLabel, todayISO } from "@/lib/calendar-dates";
 import { assignLanes } from "@/lib/calendar-lanes";
 
 export type BerthRow = { id: string; name: string; active: boolean };
-export type BookingBlock = {
+
+// A single bar on the grid — a Booking, Event, or Closure, pre-formatted
+// by the caller so this component stays agnostic to which.
+export type OccupancyBlock = {
   id: string;
   berthId: string;
   startDate: string;
   endDate: string;
-  status: "confirmed" | "tentative" | "cancelled";
-  overridden: boolean;
-  vesselName: string;
-  staffLabel: string;
+  label: string;
+  title: string;
+  colorClass: string;
+  ringed: boolean;
+  href: string;
 };
 
 const LABEL_WIDTH = 180;
 const LANE_HEIGHT = 26;
 const MIN_ROW_HEIGHT = 40;
-
-const STATUS_CLASS: Record<BookingBlock["status"], string> = {
-  confirmed: "bg-green-500/90 text-white",
-  tentative: "bg-amber-500/90 text-white",
-  cancelled: "bg-zinc-400/80 text-white line-through",
-};
 
 function dayWidthFor(view: ViewType) {
   if (view === "day") return 220;
@@ -35,12 +33,12 @@ export default function BerthDayGrid({
   view,
   days,
   berths,
-  bookings,
+  blocks,
 }: {
   view: ViewType;
   days: string[];
   berths: BerthRow[];
-  bookings: BookingBlock[];
+  blocks: OccupancyBlock[];
 }) {
   const dayWidth = dayWidthFor(view);
   const gridCols = `${LABEL_WIDTH}px repeat(${days.length}, ${dayWidth}px)`;
@@ -78,8 +76,8 @@ export default function BerthDayGrid({
 
         {/* Berth rows */}
         {berths.map((berth) => {
-          const berthBookings = bookings.filter((b) => b.berthId === berth.id);
-          const { laneOf, laneCount } = assignLanes(berthBookings);
+          const berthBlocks = blocks.filter((b) => b.berthId === berth.id);
+          const { laneOf, laneCount } = assignLanes(berthBlocks);
           const rowHeight = Math.max(MIN_ROW_HEIGHT, laneCount * LANE_HEIGHT + 6);
 
           return (
@@ -111,13 +109,11 @@ export default function BerthDayGrid({
                   ))}
                 </div>
 
-                {/* Booking bars */}
-                {berthBookings.map((booking, i) => {
-                  const clippedStart = booking.startDate < days[0] ? days[0] : booking.startDate;
+                {/* Occupancy bars */}
+                {berthBlocks.map((block, i) => {
+                  const clippedStart = block.startDate < days[0] ? days[0] : block.startDate;
                   const clippedEnd =
-                    booking.endDate > days[days.length - 1]
-                      ? days[days.length - 1]
-                      : booking.endDate;
+                    block.endDate > days[days.length - 1] ? days[days.length - 1] : block.endDate;
                   const startIdx = days.indexOf(clippedStart);
                   const endIdx = days.indexOf(clippedEnd);
                   const left = (startIdx / days.length) * 100;
@@ -125,11 +121,11 @@ export default function BerthDayGrid({
 
                   return (
                     <Link
-                      key={booking.id}
-                      href={`/bookings/${booking.id}/edit`}
-                      title={`${booking.vesselName} — ${booking.startDate} to ${booking.endDate} — ${booking.status}${booking.overridden ? " (overridden)" : ""} — booked by ${booking.staffLabel}`}
-                      className={`absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm ${STATUS_CLASS[booking.status]} ${
-                        booking.overridden ? "ring-2 ring-red-500" : ""
+                      key={block.id}
+                      href={block.href}
+                      title={block.title}
+                      className={`absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm ${block.colorClass} ${
+                        block.ringed ? "ring-2 ring-red-500" : ""
                       }`}
                       style={{
                         left: `${left}%`,
@@ -138,7 +134,7 @@ export default function BerthDayGrid({
                         height: LANE_HEIGHT - 4,
                       }}
                     >
-                      <span className="truncate">{booking.vesselName}</span>
+                      <span className="truncate">{block.label}</span>
                     </Link>
                   );
                 })}
