@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { checkClosureConflicts, type ClosureFormState } from "@/app/(protected)/closures/actions";
+import RecurrenceFields, { type SeriesRule } from "@/components/RecurrenceFields";
 
 type Berth = { id: string; name: string; active: boolean };
 type Closure = {
@@ -9,6 +10,7 @@ type Closure = {
   startDate: string;
   endDate: string;
   reason: string;
+  seriesId?: string | null;
 };
 
 const inputClass =
@@ -18,6 +20,7 @@ const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-
 export default function ClosureForm({
   berths,
   closure,
+  seriesRule,
   defaultBerthId,
   defaultDate,
   excludeClosureId,
@@ -25,6 +28,7 @@ export default function ClosureForm({
 }: {
   berths: Berth[];
   closure?: Closure;
+  seriesRule?: SeriesRule;
   defaultBerthId?: string;
   defaultDate?: string;
   excludeClosureId?: string;
@@ -40,6 +44,7 @@ export default function ClosureForm({
   const [endDate, setEndDate] = useState(closure?.endDate ?? defaultDate ?? "");
   const [overridden, setOverridden] = useState(false);
   const [overrideNote, setOverrideNote] = useState("");
+  const [scope, setScope] = useState<"this" | "following">("this");
 
   const [conflicts, setConflicts] = useState<string[]>([]);
   const [checking, setChecking] = useState(false);
@@ -79,6 +84,36 @@ export default function ClosureForm({
         <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
           {state.error}
         </p>
+      )}
+
+      {closure?.seriesId && (
+        <div className="rounded border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
+          <p className="mb-2 text-sm font-medium text-blue-900 dark:text-blue-200">
+            Part of a recurring series
+          </p>
+          <div className="space-y-1">
+            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+              <input
+                type="radio"
+                name="scope"
+                value="this"
+                checked={scope === "this"}
+                onChange={() => setScope("this")}
+              />
+              This occurrence only
+            </label>
+            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+              <input
+                type="radio"
+                name="scope"
+                value="following"
+                checked={scope === "following"}
+                onChange={() => setScope("following")}
+              />
+              This and all following occurrences
+            </label>
+          </div>
+        </div>
       )}
 
       <div>
@@ -123,6 +158,11 @@ export default function ClosureForm({
           />
         </div>
       </div>
+
+      {!closure && <RecurrenceFields />}
+      {closure?.seriesId && scope === "following" && (
+        <RecurrenceFields alwaysOn initial={seriesRule} />
+      )}
 
       <div>
         <label className={labelClass}>Reason</label>

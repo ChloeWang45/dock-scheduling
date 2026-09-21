@@ -5,7 +5,24 @@ import { berths, closures, users } from "@/db/schema";
 import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { formatStaffName } from "@/lib/user-display";
+import { groupBySeries } from "@/lib/group-series";
+import { todayISO } from "@/lib/calendar-dates";
+import SeriesGroup from "@/components/SeriesGroup";
 import { cancelClosure } from "./actions";
+
+type Row = {
+  id: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  active: boolean;
+  overridden: boolean;
+  seriesId: string | null;
+  berthName: string;
+  staffName: string;
+  staffTitle: string | null;
+  staffRole: string;
+};
 
 export default async function ClosuresPage() {
   const session = await auth();
@@ -18,6 +35,7 @@ export default async function ClosuresPage() {
       reason: closures.reason,
       active: closures.active,
       overridden: closures.overridden,
+      seriesId: closures.seriesId,
       berthName: berths.name,
       staffName: users.name,
       staffTitle: users.title,
@@ -27,6 +45,61 @@ export default async function ClosuresPage() {
     .innerJoin(berths, eq(closures.berthId, berths.id))
     .innerJoin(users, eq(closures.createdByStaffId, users.id))
     .orderBy(desc(closures.startDate));
+
+  const groups = groupBySeries(rows, todayISO());
+  const columnCount = editable ? 6 : 5;
+
+  function renderRow(row: Row) {
+    return (
+      <tr key={row.id} className="text-zinc-800 dark:text-zinc-200">
+        <td className="px-4 py-2">{row.berthName}</td>
+        <td className="px-4 py-2">
+          {row.startDate === row.endDate ? row.startDate : `${row.startDate} – ${row.endDate}`}
+          {row.seriesId && (
+            <span title="Part of a recurring series" className="ml-1.5 text-zinc-400">
+              ↻
+            </span>
+          )}
+        </td>
+        <td className="px-4 py-2">{row.reason}</td>
+        <td className="px-4 py-2">{formatStaffName(row.staffName, row.staffTitle, row.staffRole)}</td>
+        <td className="px-4 py-2">
+          {row.active ? (
+            <span className="text-red-700 dark:text-red-400">Closed</span>
+          ) : (
+            <span className="text-zinc-400">Cancelled</span>
+          )}
+          {row.overridden && (
+            <span className="ml-2 rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+              Overridden
+            </span>
+          )}
+        </td>
+        {editable && (
+          <td className="px-4 py-2 text-right">
+            <div className="flex items-center justify-end gap-3">
+              <Link
+                href={`/closures/${row.id}/edit`}
+                className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+              >
+                Edit
+              </Link>
+              {row.active && (
+                <form action={cancelClosure.bind(null, row.id)}>
+                  <button
+                    type="submit"
+                    className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
+            </div>
+          </td>
+        )}
+      </tr>
+    );
+  }
 
   return (
     <div>
@@ -54,53 +127,14 @@ export default async function ClosuresPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-            {rows.map((row) => (
-              <tr key={row.id} className="text-zinc-800 dark:text-zinc-200">
-                <td className="px-4 py-2">{row.berthName}</td>
-                <td className="px-4 py-2">
-                  {row.startDate === row.endDate
-                    ? row.startDate
-                    : `${row.startDate} – ${row.endDate}`}
-                </td>
-                <td className="px-4 py-2">{row.reason}</td>
-                <td className="px-4 py-2">
-                  {formatStaffName(row.staffName, row.staffTitle, row.staffRole)}
-                </td>
-                <td className="px-4 py-2">
-                  {row.active ? (
-                    <span className="text-red-700 dark:text-red-400">Closed</span>
-                  ) : (
-                    <span className="text-zinc-400">Cancelled</span>
-                  )}
-                  {row.overridden && (
-                    <span className="ml-2 rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                      Overridden
-                    </span>
-                  )}
-                </td>
-                {editable && (
-                  <td className="px-4 py-2 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <Link
-                        href={`/closures/${row.id}/edit`}
-                        className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-                      >
-                        Edit
-                      </Link>
-                      {row.active && (
-                        <form action={cancelClosure.bind(null, row.id)}>
-                          <button
-                            type="submit"
-                            className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-                          >
-                            Cancel
-                          </button>
-                        </form>
-                      )}
-                    </div>
-                  </td>
-                )}
-              </tr>
+            {groups.map(({ primary, extras }) => (
+              <SeriesGroup
+                key={primary.id}
+                primaryRow={renderRow(primary)}
+                extraRows={extras.map(renderRow)}
+                extraCount={extras.length}
+                columnCount={columnCount}
+              />
             ))}
           </tbody>
         </table>

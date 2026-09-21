@@ -145,6 +145,7 @@ export const closures = pgTable("closures", {
   active: boolean("active").notNull().default(true),
   overridden: boolean("overridden").notNull().default(false),
   overrideNote: text("override_note"),
+  seriesId: uuid("series_id").references(() => recurrenceSeries.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

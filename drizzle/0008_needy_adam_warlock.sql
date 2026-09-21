@@ -1,0 +1,2 @@
+ALTER TABLE "closures" ADD COLUMN "series_id" uuid;--> statement-breakpoint
+ALTER TABLE "closures" ADD CONSTRAINT "closures_series_id_recurrence_series_id_fk" FOREIGN KEY ("series_id") REFERENCES "public"."recurrence_series"("id") ON DELETE no action ON UPDATE no action;
