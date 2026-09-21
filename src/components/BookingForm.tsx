@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { checkBookingIssues, type BookingFormState } from "@/app/(protected)/bookings/actions";
-import RecurrenceFields from "@/components/RecurrenceFields";
+import RecurrenceFields, { type SeriesRule } from "@/components/RecurrenceFields";
 
 type Berth = { id: string; name: string; active: boolean };
 type Vessel = { id: string; name: string; active: boolean };
@@ -27,6 +27,7 @@ export default function BookingForm({
   berths,
   vessels,
   booking,
+  seriesRule,
   defaultBerthId,
   defaultDate,
   excludeBookingId,
@@ -35,6 +36,7 @@ export default function BookingForm({
   berths: Berth[];
   vessels: Vessel[];
   booking?: Booking;
+  seriesRule?: SeriesRule;
   defaultBerthId?: string;
   defaultDate?: string;
   excludeBookingId?: string;
@@ -54,6 +56,7 @@ export default function BookingForm({
   const [isAllDay, setIsAllDay] = useState(booking?.isAllDay ?? true);
   const [overridden, setOverridden] = useState(false);
   const [overrideNote, setOverrideNote] = useState("");
+  const [scope, setScope] = useState<"this" | "following">("this");
 
   const [issues, setIssues] = useState<{ conflicts: string[]; fitIssues: string[] }>({
     conflicts: [],
@@ -113,11 +116,23 @@ export default function BookingForm({
           </p>
           <div className="space-y-1">
             <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
-              <input type="radio" name="scope" value="this" defaultChecked />
+              <input
+                type="radio"
+                name="scope"
+                value="this"
+                checked={scope === "this"}
+                onChange={() => setScope("this")}
+              />
               This occurrence only
             </label>
             <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
-              <input type="radio" name="scope" value="following" />
+              <input
+                type="radio"
+                name="scope"
+                value="following"
+                checked={scope === "following"}
+                onChange={() => setScope("following")}
+              />
               This and all following occurrences
             </label>
           </div>
@@ -186,6 +201,9 @@ export default function BookingForm({
       </div>
 
       {!booking && <RecurrenceFields />}
+      {booking?.seriesId && scope === "following" && (
+        <RecurrenceFields alwaysOn initial={seriesRule} />
+      )}
 
       <div className="flex items-center gap-2">
         <input

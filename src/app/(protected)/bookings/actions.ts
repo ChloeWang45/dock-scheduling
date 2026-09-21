@@ -97,6 +97,30 @@ async function issuesFor(
   return [...conflicts.map((c) => c.message), ...violations.map((f) => f.message)];
 }
 
+async function issuesForExcludingSeries(
+  berthId: string,
+  vesselId: string,
+  startDate: string,
+  endDate: string,
+  excludeBookingIds: string[],
+): Promise<string[]> {
+  const [berth] = await db.select().from(berths).where(eq(berths.id, berthId)).limit(1);
+  const [vessel] = await db.select().from(vessels).where(eq(vessels.id, vesselId)).limit(1);
+  if (!berth || !vessel) return [];
+
+  const [conflicts, fitIssues] = await Promise.all([
+    checkBerthConflicts({
+      berthId,
+      startDate,
+      endDate,
+      excludeSourceIds: { table: "bookings", ids: excludeBookingIds },
+    }),
+    Promise.resolve(checkFit(vessel, berth)),
+  ]);
+  const violations = fitIssues.filter((f) => f.status === "violation");
+  return [...conflicts.map((c) => c.message), ...violations.map((f) => f.message)];
+}
+
 export type BookingFormState = { error: string } | undefined;
 
 export async function createBooking(
@@ -182,6 +206,84 @@ export async function updateBooking(
   const booking = bookingFromForm(formData, user.id);
   const scope = String(formData.get("scope") ?? "this");
 
+  if (scope === "following") {
+    const [current] = await db.select().from(bookings).where(eq(bookings.id, id)).limit(1);
+    if (current?.seriesId) {
+      const rule = recurrenceRuleFromForm(formData);
+      if (!rule) return { error: "Invalid recurrence settings." };
+
+      const occurrences = generateOccurrences(booking.startDate, booking.endDate, rule);
+      if (occurrences.length === 0) {
+        return { error: "That recurrence produces no occurrences — check the end condition." };
+      }
+
+      const seriesBookingIds = (
+        await db
+          .select({ id: bookings.id })
+          .from(bookings)
+          .where(eq(bookings.seriesId, current.seriesId))
+      ).map((r) => r.id);
+
+      const allIssues: string[] = [];
+      for (const occ of occurrences) {
+        const issues = await issuesForExcludingSeries(
+          booking.berthId,
+          booking.vesselId,
+          occ.startDate,
+          occ.endDate,
+          seriesBookingIds,
+        );
+        if (issues.length > 0) allIssues.push(`${occ.startDate}: ${issues.join(" ")}`);
+      }
+      if (allIssues.length > 0 && !(booking.overridden && booking.overrideNote)) {
+        const preview = allIssues.slice(0, 3).join(" | ");
+        return {
+          error: `${allIssues.length} of ${occurrences.length} occurrences have issues: ${preview}${
+            allIssues.length > 3 ? " …" : ""
+          } Check "override" and enter a justification to save the whole series anyway.`,
+        };
+      }
+
+      const { startDate: _sd, endDate: _ed, ...fieldsNoDate } = booking;
+      // Preserve the series' original creator rather than the editor.
+      fieldsNoDate.createdByStaffId = current.createdByStaffId;
+
+      const deleteOld = db
+        .delete(bookings)
+        .where(
+          and(eq(bookings.seriesId, current.seriesId), gte(bookings.startDate, current.startDate)),
+        );
+      const updateSeries = db
+        .update(recurrenceSeries)
+        .set({
+          frequency: rule.frequency,
+          interval: rule.interval,
+          endDate: rule.endType === "date" ? rule.endDate : null,
+          endCount: rule.endType === "count" ? rule.endCount : null,
+        })
+        .where(eq(recurrenceSeries.id, current.seriesId));
+      const [firstInsert, ...restInserts] = occurrences.map((occ) =>
+        db.insert(bookings).values({
+          ...fieldsNoDate,
+          startDate: occ.startDate,
+          endDate: occ.endDate,
+          seriesId: current.seriesId,
+        }),
+      );
+
+      try {
+        await db.batch([deleteOld, updateSeries, firstInsert, ...restInserts]);
+      } catch {
+        return {
+          error: "Could not update the series: two or more occurrences would overlap each other. Try a longer interval or a shorter stay.",
+        };
+      }
+
+      revalidatePath("/bookings");
+      redirect("/bookings");
+    }
+  }
+
   const issues = await issuesFor(
     booking.berthId,
     booking.vesselId,
@@ -193,21 +295,8 @@ export async function updateBooking(
     return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
   }
 
-  const { createdByStaffId: _createdByStaffId, startDate, endDate, ...rest } = booking;
-
-  if (scope === "following") {
-    const [current] = await db.select().from(bookings).where(eq(bookings.id, id)).limit(1);
-    if (current?.seriesId) {
-      await db
-        .update(bookings)
-        .set(rest)
-        .where(and(eq(bookings.seriesId, current.seriesId), gte(bookings.startDate, current.startDate)));
-      revalidatePath("/bookings");
-      redirect("/bookings");
-    }
-  }
-
-  await db.update(bookings).set({ ...rest, startDate, endDate }).where(eq(bookings.id, id));
+  const { createdByStaffId: _createdByStaffId, ...rest } = booking;
+  await db.update(bookings).set(rest).where(eq(bookings.id, id));
   revalidatePath("/bookings");
   redirect("/bookings");
 }

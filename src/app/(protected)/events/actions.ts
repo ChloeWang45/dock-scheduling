@@ -66,6 +66,21 @@ async function issuesFor(
   return conflicts.map((c) => c.message);
 }
 
+async function issuesForExcludingSeries(
+  berthId: string,
+  startDate: string,
+  endDate: string,
+  excludeEventIds: string[],
+): Promise<string[]> {
+  const conflicts = await checkBerthConflicts({
+    berthId,
+    startDate,
+    endDate,
+    excludeSourceIds: { table: "events", ids: excludeEventIds },
+  });
+  return conflicts.map((c) => c.message);
+}
+
 export type EventFormState = { error: string } | undefined;
 
 export async function createEvent(
@@ -151,26 +166,85 @@ export async function updateEvent(
   const event = eventFromForm(formData, user.id);
   const scope = String(formData.get("scope") ?? "this");
 
-  const issues = await issuesFor(event.berthId, event.startDate, event.endDate, id);
-  if (issues.length > 0 && !(event.overridden && event.overrideNote)) {
-    return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
-  }
-
-  const { createdByStaffId: _createdByStaffId, startDate, endDate, ...rest } = event;
-
   if (scope === "following") {
     const [current] = await db.select().from(events).where(eq(events.id, id)).limit(1);
     if (current?.seriesId) {
-      await db
-        .update(events)
-        .set(rest)
+      const rule = recurrenceRuleFromForm(formData);
+      if (!rule) return { error: "Invalid recurrence settings." };
+
+      const occurrences = generateOccurrences(event.startDate, event.endDate, rule);
+      if (occurrences.length === 0) {
+        return { error: "That recurrence produces no occurrences — check the end condition." };
+      }
+
+      const seriesEventIds = (
+        await db.select({ id: events.id }).from(events).where(eq(events.seriesId, current.seriesId))
+      ).map((r) => r.id);
+
+      const allIssues: string[] = [];
+      for (const occ of occurrences) {
+        const issues = await issuesForExcludingSeries(
+          event.berthId,
+          occ.startDate,
+          occ.endDate,
+          seriesEventIds,
+        );
+        if (issues.length > 0) allIssues.push(`${occ.startDate}: ${issues.join(" ")}`);
+      }
+      if (allIssues.length > 0 && !(event.overridden && event.overrideNote)) {
+        const preview = allIssues.slice(0, 3).join(" | ");
+        return {
+          error: `${allIssues.length} of ${occurrences.length} occurrences have issues: ${preview}${
+            allIssues.length > 3 ? " …" : ""
+          } Check "override" and enter a justification to save the whole series anyway.`,
+        };
+      }
+
+      const { startDate: _sd, endDate: _ed, ...fieldsNoDate } = event;
+      // Preserve the series' original creator rather than the editor.
+      fieldsNoDate.createdByStaffId = current.createdByStaffId;
+
+      const deleteOld = db
+        .delete(events)
         .where(and(eq(events.seriesId, current.seriesId), gte(events.startDate, current.startDate)));
+      const updateSeries = db
+        .update(recurrenceSeries)
+        .set({
+          frequency: rule.frequency,
+          interval: rule.interval,
+          endDate: rule.endType === "date" ? rule.endDate : null,
+          endCount: rule.endType === "count" ? rule.endCount : null,
+        })
+        .where(eq(recurrenceSeries.id, current.seriesId));
+      const [firstInsert, ...restInserts] = occurrences.map((occ) =>
+        db.insert(events).values({
+          ...fieldsNoDate,
+          startDate: occ.startDate,
+          endDate: occ.endDate,
+          seriesId: current.seriesId,
+        }),
+      );
+
+      try {
+        await db.batch([deleteOld, updateSeries, firstInsert, ...restInserts]);
+      } catch {
+        return {
+          error: "Could not update the series: two or more occurrences would overlap each other. Try a longer interval or a shorter duration.",
+        };
+      }
+
       revalidatePath("/events");
       redirect("/events");
     }
   }
 
-  await db.update(events).set({ ...rest, startDate, endDate }).where(eq(events.id, id));
+  const issues = await issuesFor(event.berthId, event.startDate, event.endDate, id);
+  if (issues.length > 0 && !(event.overridden && event.overrideNote)) {
+    return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
+  }
+
+  const { createdByStaffId: _createdByStaffId, ...rest } = event;
+  await db.update(events).set(rest).where(eq(events.id, id));
   revalidatePath("/events");
   redirect("/events");
 }

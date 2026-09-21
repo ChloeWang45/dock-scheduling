@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { berths, bookings, vessels } from "@/db/schema";
+import { berths, bookings, recurrenceSeries, vessels } from "@/db/schema";
 import BookingForm from "@/components/BookingForm";
 import { requireStaff } from "@/lib/authz";
+import { seriesRuleFromRow } from "@/lib/recurrence";
 import { cancelBookingFollowing, updateBooking } from "../../actions";
 
 export default async function EditBookingPage({
@@ -20,6 +21,16 @@ export default async function EditBookingPage({
   ]);
   if (!booking) notFound();
 
+  let seriesRule = undefined;
+  if (booking.seriesId) {
+    const [row] = await db
+      .select()
+      .from(recurrenceSeries)
+      .where(eq(recurrenceSeries.id, booking.seriesId))
+      .limit(1);
+    if (row) seriesRule = seriesRuleFromRow(row);
+  }
+
   return (
     <div>
       <h1 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
@@ -29,6 +40,7 @@ export default async function EditBookingPage({
         berths={allBerths}
         vessels={allVessels}
         booking={booking}
+        seriesRule={seriesRule}
         excludeBookingId={id}
         action={updateBooking.bind(null, id)}
       />

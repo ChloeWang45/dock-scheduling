@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { checkEventConflicts, type EventFormState } from "@/app/(protected)/events/actions";
-import RecurrenceFields from "@/components/RecurrenceFields";
+import RecurrenceFields, { type SeriesRule } from "@/components/RecurrenceFields";
 
 type Berth = { id: string; name: string; active: boolean };
 type Event = {
@@ -24,6 +24,7 @@ const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-
 export default function EventForm({
   berths,
   event,
+  seriesRule,
   defaultBerthId,
   defaultDate,
   excludeEventId,
@@ -31,6 +32,7 @@ export default function EventForm({
 }: {
   berths: Berth[];
   event?: Event;
+  seriesRule?: SeriesRule;
   defaultBerthId?: string;
   defaultDate?: string;
   excludeEventId?: string;
@@ -43,6 +45,7 @@ export default function EventForm({
   const [endDate, setEndDate] = useState(event?.endDate ?? defaultDate ?? "");
   const [overridden, setOverridden] = useState(false);
   const [overrideNote, setOverrideNote] = useState("");
+  const [scope, setScope] = useState<"this" | "following">("this");
 
   const [conflicts, setConflicts] = useState<string[]>([]);
   const [checking, setChecking] = useState(false);
@@ -91,11 +94,23 @@ export default function EventForm({
           </p>
           <div className="space-y-1">
             <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
-              <input type="radio" name="scope" value="this" defaultChecked />
+              <input
+                type="radio"
+                name="scope"
+                value="this"
+                checked={scope === "this"}
+                onChange={() => setScope("this")}
+              />
               This occurrence only
             </label>
             <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
-              <input type="radio" name="scope" value="following" />
+              <input
+                type="radio"
+                name="scope"
+                value="following"
+                checked={scope === "following"}
+                onChange={() => setScope("following")}
+              />
               This and all following occurrences
             </label>
           </div>
@@ -179,6 +194,9 @@ export default function EventForm({
       </div>
 
       {!event && <RecurrenceFields />}
+      {event?.seriesId && scope === "following" && (
+        <RecurrenceFields alwaysOn initial={seriesRule} />
+      )}
 
       <div>
         <label className={labelClass}>Organizer</label>

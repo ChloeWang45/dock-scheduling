@@ -1,4 +1,4 @@
-import { and, eq, not, sql } from "drizzle-orm";
+import { and, eq, inArray, not, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, berthOccupancyLedger, bookings, closures, events, vessels } from "@/db/schema";
 
@@ -63,6 +63,9 @@ export async function checkBerthConflicts(params: {
   startDate: string;
   endDate: string;
   excludeSource?: { table: LedgerSourceTable; id: string };
+  // Used when regenerating a whole series: excludes every occurrence that
+  // belongs to it, since they're about to be replaced anyway.
+  excludeSourceIds?: { table: LedgerSourceTable; ids: string[] };
 }): Promise<ConflictIssue[]> {
   const [berth] = await db.select().from(berths).where(eq(berths.id, params.berthId)).limit(1);
   if (!berth) return [];
@@ -78,6 +81,14 @@ export async function checkBerthConflicts(params: {
               and(
                 eq(berthOccupancyLedger.sourceTable, params.excludeSource.table),
                 eq(berthOccupancyLedger.sourceId, params.excludeSource.id),
+              )!,
+            )
+          : undefined,
+        params.excludeSourceIds && params.excludeSourceIds.ids.length > 0
+          ? not(
+              and(
+                eq(berthOccupancyLedger.sourceTable, params.excludeSourceIds.table),
+                inArray(berthOccupancyLedger.sourceId, params.excludeSourceIds.ids),
               )!,
             )
           : undefined,

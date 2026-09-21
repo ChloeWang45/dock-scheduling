@@ -38,6 +38,23 @@ export type RecurrenceRule = {
 
 export type Occurrence = { startDate: string; endDate: string };
 
+// Converts a recurrence_series DB row into the shape RecurrenceFields
+// expects for pre-filling the "edit this and following" rule editor.
+export function seriesRuleFromRow(row: {
+  frequency: Frequency;
+  interval: number;
+  endDate: string | null;
+  endCount: number | null;
+}): RecurrenceRule {
+  return {
+    frequency: row.frequency,
+    interval: row.interval,
+    endType: row.endDate ? "date" : "count",
+    endDate: row.endDate ?? undefined,
+    endCount: row.endCount ?? undefined,
+  };
+}
+
 /**
  * Generates every occurrence's [startDate, endDate], starting from the
  * first occurrence's own dates (which set the per-occurrence duration).
