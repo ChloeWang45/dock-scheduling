@@ -43,22 +43,10 @@ export default async function ProtectedLayout({
             Vessels
           </Link>
           <Link
-            href="/bookings"
+            href="/schedule"
             className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
           >
-            Bookings
-          </Link>
-          <Link
-            href="/events"
-            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-          >
-            Events
-          </Link>
-          <Link
-            href="/closures"
-            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
-          >
-            Closures
+            Schedule
           </Link>
           <Link
             href="/reports"

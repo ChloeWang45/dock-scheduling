@@ -97,8 +97,8 @@ export async function createEvent(
       return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
     }
     await db.insert(events).values(event);
-    revalidatePath("/events");
-    redirect("/events");
+    revalidatePath("/schedule");
+    redirect("/schedule");
   }
 
   const rule = recurrenceRuleFromForm(formData);
@@ -153,8 +153,8 @@ export async function createEvent(
     };
   }
 
-  revalidatePath("/events");
-  redirect("/events");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function updateEvent(
@@ -233,8 +233,8 @@ export async function updateEvent(
         };
       }
 
-      revalidatePath("/events");
-      redirect("/events");
+      revalidatePath("/schedule");
+      redirect("/schedule");
     }
   }
 
@@ -245,14 +245,14 @@ export async function updateEvent(
 
   const { createdByStaffId: _createdByStaffId, ...rest } = event;
   await db.update(events).set(rest).where(eq(events.id, id));
-  revalidatePath("/events");
-  redirect("/events");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function cancelEvent(id: string) {
   await requireStaff();
   await db.update(events).set({ active: false }).where(eq(events.id, id));
-  revalidatePath("/events");
+  revalidatePath("/schedule");
 }
 
 export async function cancelEventFollowing(id: string) {
@@ -266,5 +266,5 @@ export async function cancelEventFollowing(id: string) {
   } else {
     await db.update(events).set({ active: false }).where(eq(events.id, id));
   }
-  revalidatePath("/events");
+  revalidatePath("/schedule");
 }

@@ -95,8 +95,8 @@ export async function createClosure(
       return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
     }
     await db.insert(closures).values(closure);
-    revalidatePath("/closures");
-    redirect("/closures");
+    revalidatePath("/schedule");
+    redirect("/schedule");
   }
 
   const rule = recurrenceRuleFromForm(formData);
@@ -151,8 +151,8 @@ export async function createClosure(
     };
   }
 
-  revalidatePath("/closures");
-  redirect("/closures");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function updateClosure(
@@ -236,8 +236,8 @@ export async function updateClosure(
         };
       }
 
-      revalidatePath("/closures");
-      redirect("/closures");
+      revalidatePath("/schedule");
+      redirect("/schedule");
     }
   }
 
@@ -248,14 +248,14 @@ export async function updateClosure(
 
   const { createdByStaffId: _createdByStaffId, ...rest } = closure;
   await db.update(closures).set(rest).where(eq(closures.id, id));
-  revalidatePath("/closures");
-  redirect("/closures");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function cancelClosure(id: string) {
   await requireStaff();
   await db.update(closures).set({ active: false }).where(eq(closures.id, id));
-  revalidatePath("/closures");
+  revalidatePath("/schedule");
 }
 
 export async function cancelClosureFollowing(id: string) {
@@ -269,5 +269,5 @@ export async function cancelClosureFollowing(id: string) {
   } else {
     await db.update(closures).set({ active: false }).where(eq(closures.id, id));
   }
-  revalidatePath("/closures");
+  revalidatePath("/schedule");
 }

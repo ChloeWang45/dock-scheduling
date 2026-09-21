@@ -137,8 +137,8 @@ export async function createBooking(
       return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
     }
     await db.insert(bookings).values(booking);
-    revalidatePath("/bookings");
-    redirect("/bookings");
+    revalidatePath("/schedule");
+    redirect("/schedule");
   }
 
   const rule = recurrenceRuleFromForm(formData);
@@ -193,8 +193,8 @@ export async function createBooking(
     };
   }
 
-  revalidatePath("/bookings");
-  redirect("/bookings");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function updateBooking(
@@ -279,8 +279,8 @@ export async function updateBooking(
         };
       }
 
-      revalidatePath("/bookings");
-      redirect("/bookings");
+      revalidatePath("/schedule");
+      redirect("/schedule");
     }
   }
 
@@ -297,14 +297,14 @@ export async function updateBooking(
 
   const { createdByStaffId: _createdByStaffId, ...rest } = booking;
   await db.update(bookings).set(rest).where(eq(bookings.id, id));
-  revalidatePath("/bookings");
-  redirect("/bookings");
+  revalidatePath("/schedule");
+  redirect("/schedule");
 }
 
 export async function cancelBooking(id: string) {
   await requireStaff();
   await db.update(bookings).set({ status: "cancelled" }).where(eq(bookings.id, id));
-  revalidatePath("/bookings");
+  revalidatePath("/schedule");
 }
 
 export async function cancelBookingFollowing(id: string) {
@@ -318,5 +318,5 @@ export async function cancelBookingFollowing(id: string) {
   } else {
     await db.update(bookings).set({ status: "cancelled" }).where(eq(bookings.id, id));
   }
-  revalidatePath("/bookings");
+  revalidatePath("/schedule");
 }

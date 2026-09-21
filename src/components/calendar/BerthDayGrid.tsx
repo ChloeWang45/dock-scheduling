@@ -104,7 +104,7 @@ export default function BerthDayGrid({
                     editable ? (
                       <Link
                         key={day}
-                        href={`/bookings/new?berthId=${berth.id}&date=${day}`}
+                        href={`/schedule/new?berthId=${berth.id}&date=${day}`}
                         className={`border-l border-zinc-100 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-900/60 ${
                           day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
                         }`}
