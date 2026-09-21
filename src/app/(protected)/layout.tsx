@@ -60,6 +60,12 @@ export default async function ProtectedLayout({
           >
             Closures
           </Link>
+          <Link
+            href="/reports"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            Reports
+          </Link>
           {session.user.role === "admin" && (
             <Link
               href="/admin/users"
