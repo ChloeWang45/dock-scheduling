@@ -1,0 +1,1527 @@
+{
+ "2018": [
+  {
+   "year": 2018,
+   "month": 1,
+   "start_day": 1,
+   "end_day": 13,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 1,
+   "start_day": 18,
+   "end_day": 18,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 1,
+   "start_day": 13,
+   "end_day": 25,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "OSV Far Tide"
+  },
+  {
+   "year": 2018,
+   "month": 2,
+   "start_day": 1,
+   "end_day": 28,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 2,
+   "start_day": 3,
+   "end_day": 5,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Northern Star"
+  },
+  {
+   "year": 2018,
+   "month": 2,
+   "start_day": 8,
+   "end_day": 8,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "OSV Quiet Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 1,
+   "end_day": 31,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 2,
+   "end_day": 3,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Northern Star"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 19,
+   "end_day": 19,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V SALT FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 23,
+   "end_day": 23,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Barge Silver Voyager"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 6,
+   "end_day": 6,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV Clear Marlin"
+  },
+  {
+   "year": 2018,
+   "month": 3,
+   "start_day": 29,
+   "end_day": 29,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Fuel truck"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 13,
+   "end_day": 13,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 27,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 6,
+   "end_day": 7,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V Salt Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 19,
+   "end_day": 20,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 26,
+   "end_day": 26,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 13,
+   "end_day": 13,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 27,
+   "end_day": 27,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 21,
+   "end_day": 21,
+   "berth": "North Finger Piers",
+   "kind": "unknown",
+   "value": "Fuel truck"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 4,
+   "end_day": 4,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Bunker barge"
+  },
+  {
+   "year": 2018,
+   "month": 4,
+   "start_day": 22,
+   "end_day": 22,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "ETA 1200"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 9,
+   "end_day": 14,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 19,
+   "end_day": 28,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 12,
+   "end_day": 13,
+   "berth": "North Pier Face",
+   "kind": "booking",
+   "value": "F/V Salt Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 1,
+   "end_day": 31,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 24,
+   "end_day": 27,
+   "berth": "Inner Channel",
+   "kind": "booking",
+   "value": "R/V Long Horizon"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 3,
+   "end_day": 3,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 8,
+   "end_day": 10,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 15,
+   "end_day": 16,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 24,
+   "end_day": 24,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 9,
+   "end_day": 9,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 30,
+   "end_day": 30,
+   "berth": "North Finger Piers",
+   "kind": "skip",
+   "value": "Fueling @0800"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Bunker barge"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 2,
+   "end_day": 2,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Arrival 1400"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 8,
+   "end_day": 8,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Fuel truck"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 10,
+   "end_day": 10,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Water/slops pumping"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 11,
+   "end_day": 11,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV Wild Lantern"
+  },
+  {
+   "year": 2018,
+   "month": 5,
+   "start_day": 15,
+   "end_day": 15,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Provisioning"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 2,
+   "end_day": 2,
+   "berth": "North Pier West",
+   "kind": "skip",
+   "value": "Bunker barge"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 4,
+   "end_day": 4,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 28,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 6,
+   "end_day": 6,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 18,
+   "end_day": 18,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V Coral Marlin"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 27,
+   "end_day": 29,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V Coral Marlin"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 5,
+   "end_day": 5,
+   "berth": "South Float West",
+   "kind": "skip",
+   "value": "Departure 0800"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 10,
+   "end_day": 10,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 25,
+   "end_day": 25,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 6,
+   "end_day": 6,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 19,
+   "end_day": 26,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 23,
+   "end_day": 23,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Bunkering"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 2,
+   "end_day": 2,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Fueling @0800"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 14,
+   "end_day": 14,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Bunker barge"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 23,
+   "end_day": 23,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Fuel truck"
+  },
+  {
+   "year": 2018,
+   "month": 6,
+   "start_day": 30,
+   "end_day": 30,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Water/slops pumping"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 7,
+   "end_day": 7,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "OSV Green Cove"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "M/V Deep Beacon"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 24,
+   "end_day": 24,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 28,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 31,
+   "end_day": 31,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "OSV Green Current"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 30,
+   "end_day": 30,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Amber Anchor"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 8,
+   "end_day": 8,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 10,
+   "end_day": 10,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 13,
+   "end_day": 13,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 15,
+   "end_day": 15,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 20,
+   "end_day": 20,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "S/V Swift Marlin"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 22,
+   "end_day": 22,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 29,
+   "end_day": 29,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 30,
+   "end_day": 30,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "M/V Western Horizon"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 1,
+   "end_day": 2,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 9,
+   "end_day": 18,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 25,
+   "end_day": 31,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 7,
+   "end_day": 7,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Fueling"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 8,
+   "end_day": 8,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "event",
+   "value": "Dive training"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 16,
+   "end_day": 16,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "event",
+   "value": "Donor reception"
+  },
+  {
+   "year": 2018,
+   "month": 7,
+   "start_day": 19,
+   "end_day": 19,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "Bunkering 1000"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 2,
+   "end_day": 5,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V High Horizon"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 3,
+   "end_day": 3,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 19,
+   "end_day": 19,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 3,
+   "end_day": 3,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 5,
+   "end_day": 5,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 9,
+   "end_day": 9,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 19,
+   "end_day": 19,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 1,
+   "end_day": 5,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 8,
+   "start_day": 12,
+   "end_day": 17,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 4,
+   "end_day": 14,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 19,
+   "end_day": 25,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 5,
+   "end_day": 5,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "M/Y Silver Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 9,
+   "end_day": 9,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 19,
+   "end_day": 20,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 9,
+   "start_day": 16,
+   "end_day": 17,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "M/Y Silver Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 10,
+   "start_day": 18,
+   "end_day": 21,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 10,
+   "start_day": 26,
+   "end_day": 31,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 10,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Quiet Osprey"
+  },
+  {
+   "year": 2018,
+   "month": 10,
+   "start_day": 2,
+   "end_day": 11,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 1,
+   "end_day": 31,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 2,
+   "end_day": 3,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "M/V GREY COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 4,
+   "end_day": 4,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "Barge SILVER VOYAGER"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 5,
+   "end_day": 6,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 7,
+   "end_day": 8,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV Silver Tide"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 9,
+   "end_day": 9,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 11,
+   "end_day": 11,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2018,
+   "month": 12,
+   "start_day": 13,
+   "end_day": 13,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Returns from sea trials"
+  }
+ ],
+ "2019": [
+  {
+   "year": 2019,
+   "month": 1,
+   "start_day": 1,
+   "end_day": 13,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 1,
+   "start_day": 18,
+   "end_day": 18,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 1,
+   "start_day": 17,
+   "end_day": 17,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "OSV Far Tide"
+  },
+  {
+   "year": 2019,
+   "month": 2,
+   "start_day": 1,
+   "end_day": 28,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 2,
+   "start_day": 7,
+   "end_day": 9,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Northern Star"
+  },
+  {
+   "year": 2019,
+   "month": 2,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "OSV Quiet Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 1,
+   "end_day": 31,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 6,
+   "end_day": 7,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V Northern Star"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 23,
+   "end_day": 23,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V SALT FATHOM"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 27,
+   "end_day": 27,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Barge Silver Voyager"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 6,
+   "end_day": 6,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV Clear Marlin"
+  },
+  {
+   "year": 2019,
+   "month": 3,
+   "start_day": 29,
+   "end_day": 29,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "unknown",
+   "value": "Fuel truck"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 1,
+   "end_day": 1,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 13,
+   "end_day": 13,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 27,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 12,
+   "end_day": 13,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V Salt Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 25,
+   "end_day": 26,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 14,
+   "end_day": 14,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 4,
+   "start_day": 28,
+   "end_day": 28,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 11,
+   "end_day": 16,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 21,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 3,
+   "end_day": 3,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 8,
+   "end_day": 10,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 15,
+   "end_day": 16,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 24,
+   "end_day": 24,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 5,
+   "start_day": 11,
+   "end_day": 29,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 4,
+   "end_day": 10,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 16,
+   "end_day": 19,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "F/V Coral Marlin"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 4,
+   "end_day": 4,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 19,
+   "end_day": 19,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 2,
+   "end_day": 12,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 6,
+   "start_day": 19,
+   "end_day": 26,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 26,
+   "end_day": 28,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 3,
+   "end_day": 3,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 10,
+   "end_day": 10,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 15,
+   "end_day": 15,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 17,
+   "end_day": 17,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 24,
+   "end_day": 24,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 31,
+   "end_day": 31,
+   "berth": "South Float West",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 1,
+   "end_day": 2,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 9,
+   "end_day": 18,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 25,
+   "end_day": 31,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 7,
+   "start_day": 16,
+   "end_day": 16,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "event",
+   "value": "Community sail day"
+  },
+  {
+   "year": 2019,
+   "month": 8,
+   "start_day": 20,
+   "end_day": 22,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "Tug BLUE FATHOM"
+  },
+  {
+   "year": 2019,
+   "month": 8,
+   "start_day": 5,
+   "end_day": 9,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 8,
+   "start_day": 16,
+   "end_day": 21,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 9,
+   "start_day": 3,
+   "end_day": 13,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 9,
+   "start_day": 18,
+   "end_day": 24,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 10,
+   "start_day": 17,
+   "end_day": 20,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 10,
+   "start_day": 25,
+   "end_day": 30,
+   "berth": "North Pier West",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 10,
+   "start_day": 1,
+   "end_day": 10,
+   "berth": "South Float East",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 1,
+   "end_day": 31,
+   "berth": "North Pier East",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 4,
+   "end_day": 4,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "R/V Long Ketch"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 5,
+   "end_day": 6,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "M/V GREY COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 7,
+   "end_day": 7,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "Barge SILVER VOYAGER"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 8,
+   "end_day": 9,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV AMBER REEF"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 10,
+   "end_day": 11,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "OSV Silver Tide"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 12,
+   "end_day": 12,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "M/V NORTHERN HARBOR"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 14,
+   "end_day": 14,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "booking",
+   "value": "R/V GOLDEN COMPASS"
+  },
+  {
+   "year": 2019,
+   "month": 12,
+   "start_day": 16,
+   "end_day": 16,
+   "berth": "Small craft slips (institution boats)",
+   "kind": "skip",
+   "value": "ETD PM"
+  }
+ ]
+}
