@@ -43,6 +43,13 @@
       "when": 1789957700887,
       "tag": "0005_add_occupancy_ledger_triggers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789958422839,
+      "tag": "0006_backfill_occupancy_ledger",
+      "breakpoints": true
     }
   ]
 }
