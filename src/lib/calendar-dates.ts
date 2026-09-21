@@ -91,10 +91,13 @@ export function formatRangeLabel(view: ViewType, anchor: string): string {
     const { start, end } = getVisibleRange("week", anchor);
     const s = new Date(start + "T00:00:00Z");
     const e = new Date(end + "T00:00:00Z");
-    const sameMonth = s.getUTCMonth() === e.getUTCMonth();
-    const startLabel = s.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+    const startLabel = s.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    });
     const endLabel = e.toLocaleDateString("en-US", {
-      month: sameMonth ? undefined : "short",
+      month: "short",
       day: "numeric",
       year: "numeric",
       timeZone: "UTC",
