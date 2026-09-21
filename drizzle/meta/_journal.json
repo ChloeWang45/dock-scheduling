@@ -64,6 +64,13 @@
       "when": 1789966196453,
       "tag": "0008_needy_adam_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790018370848,
+      "tag": "0009_daffy_frog_thor",
+      "breakpoints": true
     }
   ]
 }

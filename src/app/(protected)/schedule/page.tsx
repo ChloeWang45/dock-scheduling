@@ -5,6 +5,7 @@ import { getScheduleEntries, type EntryType, type ScheduleEntry } from "@/lib/sc
 import { groupBySeries } from "@/lib/group-series";
 import { todayISO } from "@/lib/calendar-dates";
 import SeriesGroup from "@/components/SeriesGroup";
+import ScheduleSearch from "@/components/ScheduleSearch";
 import { cancelBooking } from "../bookings/actions";
 import { cancelEvent } from "../events/actions";
 import { cancelClosure } from "../closures/actions";
@@ -37,17 +38,28 @@ function cancelActionFor(entry: ScheduleEntry) {
 export default async function SchedulePage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; q?: string }>;
 }) {
   const session = await auth();
   const editable = canWrite(session!.user.role);
-  const { type } = await searchParams;
+  const { type, q: rawQ } = await searchParams;
   const activeFilter: "all" | EntryType =
     type === "booking" || type === "event" || type === "closure" ? type : "all";
+  const q = (rawQ ?? "").trim();
 
   const allEntries = await getScheduleEntries();
-  const entries =
+  let entries =
     activeFilter === "all" ? allEntries : allEntries.filter((e) => e.type === activeFilter);
+  if (q) {
+    const needle = q.toLowerCase();
+    entries = entries.filter(
+      (e) =>
+        e.title.toLowerCase().includes(needle) ||
+        (e.subtitle?.toLowerCase().includes(needle) ?? false) ||
+        e.berthName.toLowerCase().includes(needle) ||
+        e.statusLabel.toLowerCase().includes(needle),
+    );
+  }
 
   const groups = groupBySeries(entries, todayISO());
   const columnCount = editable ? 7 : 6;
@@ -126,11 +138,16 @@ export default async function SchedulePage({
         )}
       </div>
 
+      <ScheduleSearch q={q} type={activeFilter} />
+
       <div className="mb-4 flex items-center gap-1 rounded border border-zinc-300 p-0.5 w-fit dark:border-zinc-700">
         {FILTERS.map((f) => (
           <Link
             key={f.value}
-            href={f.value === "all" ? "/schedule" : `/schedule?type=${f.value}`}
+            href={
+              (f.value === "all" ? "/schedule" : `/schedule?type=${f.value}`) +
+              (q ? `${f.value === "all" ? "?" : "&"}q=${encodeURIComponent(q)}` : "")
+            }
             className={`rounded px-3 py-1 text-sm ${
               activeFilter === f.value
                 ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
@@ -141,6 +158,14 @@ export default async function SchedulePage({
           </Link>
         ))}
       </div>
+
+      {q && (
+        <p className="mb-3 text-sm text-zinc-500">
+          {entries.length === 0
+            ? `No bookings, events, or closures match "${q}".`
+            : `${entries.length} result${entries.length === 1 ? "" : "s"} for "${q}".`}
+        </p>
+      )}
 
       <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
         <table className="w-full text-left text-sm">

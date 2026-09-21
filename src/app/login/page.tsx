@@ -6,9 +6,9 @@ import { signIn } from "@/auth";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; signedUp?: string }>;
+  searchParams: Promise<{ error?: string; signedUp?: string; reset?: string }>;
 }) {
-  const { error, signedUp } = await searchParams;
+  const { error, signedUp, reset } = await searchParams;
 
   async function login(formData: FormData) {
     "use server";
@@ -50,6 +50,11 @@ export default async function LoginPage({
             Account created. An admin needs to approve it before you can log in.
           </p>
         )}
+        {reset && (
+          <p className="mb-4 rounded bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
+            Password updated. Log in with your new password.
+          </p>
+        )}
         {errorMessage && (
           <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
             {errorMessage}
@@ -65,9 +70,17 @@ export default async function LoginPage({
           autoFocus
           className="mb-4 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
         />
-        <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Password
-        </label>
+        <div className="mb-1 flex items-center justify-between">
+          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            Password
+          </label>
+          <Link
+            href="/forgot-password"
+            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <input
           name="password"
           type="password"
