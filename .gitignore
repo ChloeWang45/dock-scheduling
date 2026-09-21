@@ -39,6 +39,7 @@ yarn-error.log*
 # local credential files (never commit)
 docking_token.txt
 vercel_token.txt
+neon_url.txt
 
 # claude code session state
 .claude/
