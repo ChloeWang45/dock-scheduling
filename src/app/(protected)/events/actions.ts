@@ -2,11 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
+import { and, eq, gte } from "drizzle-orm";
 import { db } from "@/db";
-import { events } from "@/db/schema";
+import { events, recurrenceSeries } from "@/db/schema";
 import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
 import { requireStaff } from "@/lib/authz";
+import { generateOccurrences, type RecurrenceRule } from "@/lib/recurrence";
 
 export async function checkEventConflicts(input: {
   berthId: string;
@@ -40,21 +41,24 @@ function eventFromForm(formData: FormData, staffId: string) {
   };
 }
 
-async function validationError(
-  event: ReturnType<typeof eventFromForm>,
-  excludeEventId?: string,
-): Promise<string | null> {
-  const conflicts = await checkEventConflicts({
-    berthId: event.berthId,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    excludeEventId,
-  });
-  if (conflicts.length > 0 && !(event.overridden && event.overrideNote)) {
-    const messages = conflicts.map((c) => c.message);
-    return `${messages.join(" ")} Check "override" and enter a justification to save anyway.`;
+function recurrenceRuleFromForm(formData: FormData): RecurrenceRule | null {
+  const frequency = String(formData.get("frequency") ?? "");
+  if (frequency !== "daily" && frequency !== "weekly" && frequency !== "monthly") return null;
+  const interval = Math.max(1, Number(formData.get("interval")) || 1);
+  const endType = String(formData.get("endType") ?? "count");
+
+  if (endType === "date") {
+    const endDate = String(formData.get("endDate") ?? "");
+    if (!endDate) return null;
+    return { frequency, interval, endType: "date", endDate };
   }
-  return null;
+  const endCount = Math.max(1, Number(formData.get("endCount")) || 1);
+  return { frequency, interval, endType: "count", endCount };
+}
+
+async function issuesFor(berthId: string, startDate: string, endDate: string): Promise<string[]> {
+  const conflicts = await checkEventConflicts({ berthId, startDate, endDate });
+  return conflicts.map((c) => c.message);
 }
 
 export type EventFormState = { error: string } | undefined;
@@ -65,10 +69,70 @@ export async function createEvent(
 ): Promise<EventFormState> {
   const user = await requireStaff();
   const event = eventFromForm(formData, user.id);
-  const error = await validationError(event);
-  if (error) return { error };
+  const repeats = formData.get("repeats") === "on";
 
-  await db.insert(events).values(event);
+  if (!repeats) {
+    const issues = await issuesFor(event.berthId, event.startDate, event.endDate);
+    if (issues.length > 0 && !(event.overridden && event.overrideNote)) {
+      return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
+    }
+    await db.insert(events).values(event);
+    revalidatePath("/events");
+    redirect("/events");
+  }
+
+  const rule = recurrenceRuleFromForm(formData);
+  if (!rule) return { error: "Invalid recurrence settings." };
+
+  const occurrences = generateOccurrences(event.startDate, event.endDate, rule);
+  if (occurrences.length === 0) {
+    return { error: "That recurrence produces no occurrences — check the end condition." };
+  }
+
+  const allIssues: string[] = [];
+  for (const occ of occurrences) {
+    const issues = await issuesFor(event.berthId, occ.startDate, occ.endDate);
+    if (issues.length > 0) allIssues.push(`${occ.startDate}: ${issues.join(" ")}`);
+  }
+
+  if (allIssues.length > 0 && !(event.overridden && event.overrideNote)) {
+    const preview = allIssues.slice(0, 3).join(" | ");
+    return {
+      error: `${allIssues.length} of ${occurrences.length} occurrences have issues: ${preview}${
+        allIssues.length > 3 ? " …" : ""
+      } Check "override" and enter a justification to save the whole series anyway.`,
+    };
+  }
+
+  const [series] = await db
+    .insert(recurrenceSeries)
+    .values({
+      frequency: rule.frequency,
+      interval: rule.interval,
+      endDate: rule.endType === "date" ? rule.endDate : null,
+      endCount: rule.endType === "count" ? rule.endCount : null,
+      createdByStaffId: user.id,
+    })
+    .returning({ id: recurrenceSeries.id });
+
+  const [firstQuery, ...restQueries] = occurrences.map((occ) =>
+    db.insert(events).values({
+      ...event,
+      startDate: occ.startDate,
+      endDate: occ.endDate,
+      seriesId: series.id,
+    }),
+  );
+
+  try {
+    await db.batch([firstQuery, ...restQueries]);
+  } catch {
+    await db.delete(recurrenceSeries).where(eq(recurrenceSeries.id, series.id));
+    return {
+      error: "Could not create the series: two or more occurrences would overlap each other. Try a longer interval or a shorter duration.",
+    };
+  }
+
   revalidatePath("/events");
   redirect("/events");
 }
@@ -80,11 +144,28 @@ export async function updateEvent(
 ): Promise<EventFormState> {
   const user = await requireStaff();
   const event = eventFromForm(formData, user.id);
-  const error = await validationError(event, id);
-  if (error) return { error };
+  const scope = String(formData.get("scope") ?? "this");
 
-  const { createdByStaffId: _createdByStaffId, ...rest } = event;
-  await db.update(events).set(rest).where(eq(events.id, id));
+  const issues = await issuesFor(event.berthId, event.startDate, event.endDate);
+  if (issues.length > 0 && !(event.overridden && event.overrideNote)) {
+    return { error: `${issues.join(" ")} Check "override" and enter a justification to save anyway.` };
+  }
+
+  const { createdByStaffId: _createdByStaffId, startDate, endDate, ...rest } = event;
+
+  if (scope === "following") {
+    const [current] = await db.select().from(events).where(eq(events.id, id)).limit(1);
+    if (current?.seriesId) {
+      await db
+        .update(events)
+        .set(rest)
+        .where(and(eq(events.seriesId, current.seriesId), gte(events.startDate, current.startDate)));
+      revalidatePath("/events");
+      redirect("/events");
+    }
+  }
+
+  await db.update(events).set({ ...rest, startDate, endDate }).where(eq(events.id, id));
   revalidatePath("/events");
   redirect("/events");
 }
@@ -92,5 +173,19 @@ export async function updateEvent(
 export async function cancelEvent(id: string) {
   await requireStaff();
   await db.update(events).set({ active: false }).where(eq(events.id, id));
+  revalidatePath("/events");
+}
+
+export async function cancelEventFollowing(id: string) {
+  await requireStaff();
+  const [current] = await db.select().from(events).where(eq(events.id, id)).limit(1);
+  if (current?.seriesId) {
+    await db
+      .update(events)
+      .set({ active: false })
+      .where(and(eq(events.seriesId, current.seriesId), gte(events.startDate, current.startDate)));
+  } else {
+    await db.update(events).set({ active: false }).where(eq(events.id, id));
+  }
   revalidatePath("/events");
 }

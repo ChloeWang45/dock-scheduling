@@ -60,6 +60,29 @@ export const bookingStatus = pgEnum("booking_status", [
   "cancelled",
 ]);
 
+export const recurrenceFrequency = pgEnum("recurrence_frequency", [
+  "daily",
+  "weekly",
+  "monthly",
+]);
+
+// One row per recurring series (e.g. a weekly community sail day); the
+// individual occurrences are ordinary Booking or Event rows that share a
+// seriesId, not virtual/computed — each participates in the normal
+// conflict engine exactly like a one-off entry.
+export const recurrenceSeries = pgTable("recurrence_series", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  frequency: recurrenceFrequency("frequency").notNull(),
+  interval: integer("interval").notNull().default(1),
+  // Exactly one of these ends the series.
+  endDate: date("end_date", { mode: "string" }),
+  endCount: integer("end_count"),
+  createdByStaffId: uuid("created_by_staff_id")
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const bookings = pgTable("bookings", {
   id: uuid("id").primaryKey().defaultRandom(),
   berthId: uuid("berth_id")
@@ -82,6 +105,7 @@ export const bookings = pgTable("bookings", {
   // or fit violation can be force-saved only with a logged reason.
   overridden: boolean("overridden").notNull().default(false),
   overrideNote: text("override_note"),
+  seriesId: uuid("series_id").references(() => recurrenceSeries.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -103,6 +127,7 @@ export const events = pgTable("events", {
   active: boolean("active").notNull().default(true),
   overridden: boolean("overridden").notNull().default(false),
   overrideNote: text("override_note"),
+  seriesId: uuid("series_id").references(() => recurrenceSeries.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

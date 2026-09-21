@@ -50,6 +50,13 @@
       "when": 1789958422839,
       "tag": "0006_backfill_occupancy_ledger",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789963605698,
+      "tag": "0007_nice_lady_ursula",
+      "breakpoints": true
     }
   ]
 }

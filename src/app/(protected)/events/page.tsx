@@ -19,6 +19,7 @@ export default async function EventsPage() {
       organizer: events.organizer,
       active: events.active,
       overridden: events.overridden,
+      seriesId: events.seriesId,
       berthName: berths.name,
       staffName: users.name,
       staffTitle: users.title,
@@ -64,6 +65,14 @@ export default async function EventsPage() {
                   {row.startDate === row.endDate
                     ? row.startDate
                     : `${row.startDate} – ${row.endDate}`}
+                  {row.seriesId && (
+                    <span
+                      title="Part of a recurring series"
+                      className="ml-1.5 text-zinc-400"
+                    >
+                      ↻
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-2">{row.organizer ?? "—"}</td>
                 <td className="px-4 py-2">

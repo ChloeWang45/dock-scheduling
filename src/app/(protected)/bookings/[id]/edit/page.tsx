@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { berths, bookings, vessels } from "@/db/schema";
 import BookingForm from "@/components/BookingForm";
 import { requireStaff } from "@/lib/authz";
-import { updateBooking } from "../../actions";
+import { cancelBookingFollowing, updateBooking } from "../../actions";
 
 export default async function EditBookingPage({
   params,
@@ -32,6 +32,16 @@ export default async function EditBookingPage({
         excludeBookingId={id}
         action={updateBooking.bind(null, id)}
       />
+      {booking.seriesId && (
+        <form action={cancelBookingFollowing.bind(null, id)} className="mt-4">
+          <button
+            type="submit"
+            className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+          >
+            Cancel this and all following occurrences
+          </button>
+        </form>
+      )}
     </div>
   );
 }

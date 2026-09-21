@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { berths, events } from "@/db/schema";
 import EventForm from "@/components/EventForm";
 import { requireStaff } from "@/lib/authz";
-import { updateEvent } from "../../actions";
+import { cancelEventFollowing, updateEvent } from "../../actions";
 
 export default async function EditEventPage({
   params,
@@ -28,6 +28,16 @@ export default async function EditEventPage({
         excludeEventId={id}
         action={updateEvent.bind(null, id)}
       />
+      {event.seriesId && (
+        <form action={cancelEventFollowing.bind(null, id)} className="mt-4">
+          <button
+            type="submit"
+            className="text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+          >
+            Cancel this and all following occurrences
+          </button>
+        </form>
+      )}
     </div>
   );
 }

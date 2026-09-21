@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { checkBookingIssues, type BookingFormState } from "@/app/(protected)/bookings/actions";
+import RecurrenceFields from "@/components/RecurrenceFields";
 
 type Berth = { id: string; name: string; active: boolean };
 type Vessel = { id: string; name: string; active: boolean };
@@ -15,6 +16,7 @@ type Booking = {
   departureTime: string | null;
   status: string;
   notes: string | null;
+  seriesId?: string | null;
 };
 
 const inputClass =
@@ -104,6 +106,24 @@ export default function BookingForm({
         </p>
       )}
 
+      {booking?.seriesId && (
+        <div className="rounded border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
+          <p className="mb-2 text-sm font-medium text-blue-900 dark:text-blue-200">
+            Part of a recurring series
+          </p>
+          <div className="space-y-1">
+            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+              <input type="radio" name="scope" value="this" defaultChecked />
+              This occurrence only
+            </label>
+            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+              <input type="radio" name="scope" value="following" />
+              This and all following occurrences
+            </label>
+          </div>
+        </div>
+      )}
+
       <div>
         <label className={labelClass}>Berth</label>
         <select
@@ -164,6 +184,8 @@ export default function BookingForm({
           />
         </div>
       </div>
+
+      {!booking && <RecurrenceFields />}
 
       <div className="flex items-center gap-2">
         <input

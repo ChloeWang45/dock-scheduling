@@ -18,6 +18,7 @@ export default async function BookingsPage() {
       isAllDay: bookings.isAllDay,
       status: bookings.status,
       overridden: bookings.overridden,
+      seriesId: bookings.seriesId,
       berthName: berths.name,
       vesselName: vessels.name,
       operator: vessels.operator,
@@ -72,6 +73,14 @@ export default async function BookingsPage() {
                   {row.startDate === row.endDate
                     ? row.startDate
                     : `${row.startDate} – ${row.endDate}`}
+                  {row.seriesId && (
+                    <span
+                      title="Part of a recurring series"
+                      className="ml-1.5 text-zinc-400"
+                    >
+                      ↻
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-2">
                   {formatStaffName(row.staffName, row.staffTitle, row.staffRole)}
