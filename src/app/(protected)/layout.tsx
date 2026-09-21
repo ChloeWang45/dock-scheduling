@@ -44,7 +44,12 @@ export default async function ProtectedLayout({
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-zinc-500">{session.user.email}</span>
+          <Link
+            href="/account"
+            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+          >
+            {session.user.email}
+          </Link>
           <form action={logout}>
             <button
               type="submit"

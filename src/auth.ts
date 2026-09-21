@@ -1,9 +1,13 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+
+export class AccountPendingError extends CredentialsSignin {
+  code = "account_pending";
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
@@ -24,10 +28,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .where(eq(users.email, email))
           .limit(1);
 
-        if (!user || user.status !== "approved") return null;
+        if (!user) return null;
 
         const passwordMatches = await bcrypt.compare(password, user.passwordHash);
         if (!passwordMatches) return null;
+
+        // Only reveal pending-approval status once the password is
+        // confirmed correct, so a wrong guess never leaks account state.
+        if (user.status !== "approved") {
+          throw new AccountPendingError();
+        }
 
         return {
           id: user.id,

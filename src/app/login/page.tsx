@@ -1,13 +1,14 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AuthError } from "next-auth";
+import { AuthError, CredentialsSignin } from "next-auth";
 import { signIn } from "@/auth";
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; signedUp?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, signedUp } = await searchParams;
 
   async function login(formData: FormData) {
     "use server";
@@ -18,12 +19,22 @@ export default async function LoginPage({
         redirectTo: "/berths",
       });
     } catch (err) {
+      if (err instanceof CredentialsSignin && err.code === "account_pending") {
+        redirect("/login?error=account_pending");
+      }
       if (err instanceof AuthError) {
-        redirect("/login?error=1");
+        redirect("/login?error=invalid_credentials");
       }
       throw err;
     }
   }
+
+  const errorMessage =
+    error === "account_pending"
+      ? "This account is pending admin approval."
+      : error
+        ? "Invalid email or password."
+        : null;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
@@ -34,9 +45,14 @@ export default async function LoginPage({
         <h1 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
           Dock Scheduling
         </h1>
-        {error && (
+        {signedUp && (
+          <p className="mb-4 rounded bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
+            Account created. An admin needs to approve it before you can log in.
+          </p>
+        )}
+        {errorMessage && (
           <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
-            Invalid email or password.
+            {errorMessage}
           </p>
         )}
         <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -64,6 +80,12 @@ export default async function LoginPage({
         >
           Log in
         </button>
+        <p className="mt-4 text-center text-sm text-zinc-600 dark:text-zinc-400">
+          No account?{" "}
+          <Link href="/signup" className="font-medium text-zinc-900 underline dark:text-zinc-50">
+            Create one
+          </Link>
+        </p>
       </form>
     </div>
   );

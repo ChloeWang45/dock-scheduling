@@ -2,6 +2,7 @@ import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { berths, bookings, users, vessels } from "@/db/schema";
+import { formatStaffName } from "@/lib/user-display";
 import { cancelBooking } from "./actions";
 
 export default async function BookingsPage() {
@@ -17,6 +18,8 @@ export default async function BookingsPage() {
       vesselName: vessels.name,
       operator: vessels.operator,
       staffName: users.name,
+      staffTitle: users.title,
+      staffRole: users.role,
     })
     .from(bookings)
     .innerJoin(berths, eq(bookings.berthId, berths.id))
@@ -64,7 +67,9 @@ export default async function BookingsPage() {
                     ? row.startDate
                     : `${row.startDate} – ${row.endDate}`}
                 </td>
-                <td className="px-4 py-2">{row.staffName}</td>
+                <td className="px-4 py-2">
+                  {formatStaffName(row.staffName, row.staffTitle, row.staffRole)}
+                </td>
                 <td className="px-4 py-2">
                   <span
                     className={
