@@ -1,26 +1,134 @@
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@700,800&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-paper: #f3f8f7;
+  --color-abyss: #0b2a3f;
+  --color-ink: #0f2733;
+  --color-ink-inverse: #e7f1f0;
+  --color-wave: #0891a6;
+  --color-foam: #bfe3dd;
+  --color-confirmed: #1f9e6d;
+  --color-tentative: #e8a33d;
+  --color-conflict: #e4483d;
+  --color-soundings: #7c93a0;
+  --color-closure-fallback: #6b5842;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paper: var(--color-paper);
+  --color-abyss: var(--color-abyss);
+  --color-ink: var(--color-ink);
+  --color-ink-inverse: var(--color-ink-inverse);
+  --color-wave: var(--color-wave);
+  --color-foam: var(--color-foam);
+  --color-confirmed: var(--color-confirmed);
+  --color-tentative: var(--color-tentative);
+  --color-conflict: var(--color-conflict);
+  --color-soundings: var(--color-soundings);
+  --color-closure-fallback: var(--color-closure-fallback);
+  --font-sans: "General Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Diagonal hazard stripe — the maritime closure-marking convention this
+   design system uses instead of a flat "fifth status color". */
+.bg-hazard-stripe {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-abyss),
+    var(--color-abyss) 6px,
+    var(--color-soundings) 6px,
+    var(--color-soundings) 12px
+  );
+}
+
+@layer components {
+  .page-title {
+    font-family: var(--font-display);
+    @apply text-2xl uppercase tracking-wide text-ink;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    @apply text-lg uppercase tracking-wide text-ink;
+  }
+  .subsection-title {
+    font-family: var(--font-display);
+    @apply text-sm uppercase tracking-wide text-ink;
+  }
+  .label-text {
+    @apply mb-1 block text-sm font-medium text-ink/80;
+  }
+  .text-input {
+    @apply w-full rounded border border-ink/20 bg-white px-3 py-2 text-sm text-ink placeholder-ink/40 transition-colors outline-none focus:border-wave focus:ring-2 focus:ring-wave/30;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded bg-wave px-4 py-2 text-sm font-medium text-ink-inverse transition-all duration-150 hover:-translate-y-px hover:bg-abyss disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded border border-ink/20 px-3 py-1.5 text-sm text-ink/80 transition-colors duration-150 hover:bg-foam/60 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .link-action {
+    @apply text-wave transition-colors duration-150 hover:text-abyss hover:underline;
+  }
+  .muted-link {
+    @apply text-sm text-ink/60 transition-colors duration-150 hover:text-ink;
+  }
+  .card {
+    @apply rounded-lg border border-ink/15 bg-white p-8 shadow-sm;
+  }
+  .table-shell {
+    @apply overflow-hidden rounded-lg border border-ink/15;
+  }
+  .table-shell-x {
+    @apply overflow-x-auto rounded-lg border border-ink/15;
+  }
+  .table-head {
+    @apply bg-foam/40 text-ink/70;
+  }
+  .table-head th {
+    @apply px-4 py-2 text-left text-xs font-semibold tracking-wide uppercase;
+  }
+  .table-divide {
+    @apply divide-y divide-ink/10;
+  }
+  .table-row {
+    @apply text-ink transition-colors duration-150 hover:bg-foam/25;
+  }
+  .banner-success {
+    @apply rounded border border-confirmed/25 bg-confirmed/10 px-3 py-2 text-sm text-confirmed;
+  }
+  .banner-error {
+    @apply rounded border border-conflict/25 bg-conflict/10 px-3 py-2 text-sm text-conflict;
+  }
+  .banner-warning {
+    @apply rounded border border-tentative/30 bg-tentative/15 px-3 py-2 text-sm text-tentative;
+  }
+  .banner-info {
+    @apply rounded border border-wave/25 bg-wave/10 px-3 py-2 text-sm text-abyss;
+  }
+  .badge {
+    @apply rounded px-2 py-0.5 text-xs font-medium;
+  }
+  .badge-confirmed {
+    @apply rounded bg-confirmed/15 px-2 py-0.5 text-xs font-medium text-confirmed;
+  }
+  .badge-tentative {
+    @apply rounded bg-tentative/20 px-2 py-0.5 text-xs font-medium text-tentative;
+  }
+  .badge-event {
+    @apply rounded bg-wave/15 px-2 py-0.5 text-xs font-medium text-wave;
+  }
+  .badge-closure {
+    @apply rounded bg-closure-fallback px-2 py-0.5 text-xs font-medium text-ink-inverse;
+  }
+  .badge-muted {
+    @apply rounded bg-ink/10 px-2 py-0.5 text-xs font-medium text-ink/50;
+  }
 }

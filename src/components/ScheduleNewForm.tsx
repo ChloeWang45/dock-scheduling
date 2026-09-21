@@ -30,10 +30,10 @@ export default function ScheduleNewForm({
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="label-text">
           Type
         </label>
-        <div className="flex items-center gap-1 rounded border border-zinc-300 p-0.5 w-fit dark:border-zinc-700">
+        <div className="flex items-center gap-1 rounded border border-ink/20 p-0.5 w-fit">
           {(["booking", "event", "closure"] as const).map((t) => (
             <button
               key={t}
@@ -41,8 +41,8 @@ export default function ScheduleNewForm({
               onClick={() => setType(t)}
               className={`rounded px-4 py-1.5 text-sm capitalize ${
                 type === t
-                  ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                  : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  ? "bg-wave text-ink-inverse"
+                  : "text-ink/70 hover:bg-foam/60"
               }`}
             >
               {t}

@@ -20,8 +20,8 @@ type Booking = {
 };
 
 const inputClass =
-  "w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
-const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300";
+  "text-input";
+const labelClass = "label-text";
 
 export default function BookingForm({
   berths,
@@ -104,18 +104,18 @@ export default function BookingForm({
   return (
     <form action={formAction} className="max-w-lg space-y-4">
       {state?.error && (
-        <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+        <p className="banner-error">
           {state.error}
         </p>
       )}
 
       {booking?.seriesId && (
-        <div className="rounded border border-blue-200 bg-blue-50 p-3 dark:border-blue-900 dark:bg-blue-950">
-          <p className="mb-2 text-sm font-medium text-blue-900 dark:text-blue-200">
+        <div className="rounded border border-wave/25 bg-wave/10 p-3">
+          <p className="mb-2 text-sm font-medium text-abyss">
             Part of a recurring series
           </p>
           <div className="space-y-1">
-            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+            <label className="flex items-center gap-2 text-sm text-abyss">
               <input
                 type="radio"
                 name="scope"
@@ -125,7 +125,7 @@ export default function BookingForm({
               />
               This occurrence only
             </label>
-            <label className="flex items-center gap-2 text-sm text-blue-900 dark:text-blue-200">
+            <label className="flex items-center gap-2 text-sm text-abyss">
               <input
                 type="radio"
                 name="scope"
@@ -213,7 +213,7 @@ export default function BookingForm({
           checked={isAllDay}
           onChange={(e) => setIsAllDay(e.target.checked)}
         />
-        <label htmlFor="isAllDay" className="text-sm text-zinc-700 dark:text-zinc-300">
+        <label htmlFor="isAllDay" className="text-sm text-ink/80">
           Full day(s)
         </label>
       </div>
@@ -266,17 +266,17 @@ export default function BookingForm({
         />
       </div>
 
-      {checking && <p className="text-sm text-zinc-500">Checking for conflicts…</p>}
+      {checking && <p className="text-sm text-ink/60">Checking for conflicts…</p>}
 
       {hasIssues && (
-        <div className="space-y-2 rounded border border-red-300 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950">
+        <div className="space-y-2 rounded border border-conflict/25 bg-conflict/10 p-3">
           {issues.conflicts.map((msg, i) => (
-            <p key={`c-${i}`} className="text-sm text-red-700 dark:text-red-300">
+            <p key={`c-${i}`} className="text-sm text-conflict">
               ⚠ {msg}
             </p>
           ))}
           {issues.fitIssues.map((msg, i) => (
-            <p key={`f-${i}`} className="text-sm text-red-700 dark:text-red-300">
+            <p key={`f-${i}`} className="text-sm text-conflict">
               ⚠ {msg}
             </p>
           ))}
@@ -288,7 +288,7 @@ export default function BookingForm({
               checked={overridden}
               onChange={(e) => setOverridden(e.target.checked)}
             />
-            <label htmlFor="overridden" className="text-sm text-red-800 dark:text-red-200">
+            <label htmlFor="overridden" className="text-sm text-conflict">
               Override and save anyway
             </label>
           </div>
@@ -309,7 +309,7 @@ export default function BookingForm({
       <button
         type="submit"
         disabled={!canSave || isPending}
-        className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="btn-primary"
       >
         {isPending ? "Saving…" : "Save"}
       </button>

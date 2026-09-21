@@ -4,21 +4,21 @@ import { useActionState } from "react";
 import { changePassword, updateProfile, type ActionState } from "@/app/(protected)/account/actions";
 
 const inputClass =
-  "w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
-const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300";
+  "text-input";
+const labelClass = "label-text";
 
 function Message({ state }: { state: ActionState }) {
   if (!state) return null;
   if (state.error) {
     return (
-      <p className="rounded bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+      <p className="banner-error">
         {state.error}
       </p>
     );
   }
   if (state.success) {
     return (
-      <p className="rounded bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
+      <p className="banner-success">
         {state.success}
       </p>
     );
@@ -49,7 +49,7 @@ export function ProfileForm({ name, title }: { name: string; title: string | nul
       <button
         type="submit"
         disabled={isPending}
-        className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="btn-primary"
       >
         {isPending ? "Saving…" : "Save profile"}
       </button>
@@ -90,7 +90,7 @@ export function PasswordForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="btn-primary"
       >
         {isPending ? "Changing…" : "Change password"}
       </button>

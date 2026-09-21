@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 const inputClass =
-  "w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
-const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300";
+  "text-input";
+const labelClass = "label-text";
 
 export type SeriesRule = {
   frequency: "daily" | "weekly" | "monthly";
@@ -27,7 +27,7 @@ export default function RecurrenceFields({
   const showFields = alwaysOn || repeats;
 
   return (
-    <div className="space-y-3 rounded border border-zinc-200 p-3 dark:border-zinc-800">
+    <div className="space-y-3 rounded border border-ink/15 p-3">
       {!alwaysOn && (
         <div className="flex items-center gap-2">
           <input
@@ -37,13 +37,13 @@ export default function RecurrenceFields({
             checked={repeats}
             onChange={(e) => setRepeats(e.target.checked)}
           />
-          <label htmlFor="repeats" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label htmlFor="repeats" className="text-sm font-medium text-ink/80">
             Repeats
           </label>
         </div>
       )}
       {!alwaysOn && repeats && (
-        <p className="pl-6 text-xs text-zinc-500">
+        <p className="pl-6 text-xs text-ink/60">
           The dates above are for the first occurrence only (and set how many days each
           occurrence lasts) — the fields below control how often it repeats and when the
           series ends.
@@ -110,7 +110,7 @@ export default function RecurrenceFields({
             </div>
           )}
 
-          <p className="text-xs text-zinc-500">Limited to 200 occurrences.</p>
+          <p className="text-xs text-ink/60">Limited to 200 occurrences.</p>
         </div>
       )}
     </div>

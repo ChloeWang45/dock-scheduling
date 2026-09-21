@@ -16,7 +16,7 @@ export default function BerthForm({
   return (
     <form action={action} className="max-w-lg space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="label-text">
           Name
         </label>
         <input
@@ -24,12 +24,12 @@ export default function BerthForm({
           type="text"
           required
           defaultValue={berth?.name}
-          className="w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="text-input"
         />
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="label-text">
             Length (ft)
           </label>
           <input
@@ -38,11 +38,11 @@ export default function BerthForm({
             step="any"
             defaultValue={berth?.lengthFt ?? ""}
             placeholder="unknown"
-            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            className="text-input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="label-text">
             Depth at low tide (ft)
           </label>
           <input
@@ -51,11 +51,11 @@ export default function BerthForm({
             step="any"
             defaultValue={berth?.depthAtLowTideFt ?? ""}
             placeholder="unknown"
-            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            className="text-input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="label-text">
             Width (ft)
           </label>
           <input
@@ -64,12 +64,12 @@ export default function BerthForm({
             step="any"
             defaultValue={berth?.widthFt ?? ""}
             placeholder="unknown"
-            className="w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            className="text-input"
           />
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <label className="label-text">
           Max simultaneous occupants
         </label>
         <input
@@ -79,12 +79,12 @@ export default function BerthForm({
           step={1}
           required
           defaultValue={berth?.maxSimultaneousOccupants ?? 1}
-          className="w-32 rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="w-32 text-input"
         />
       </div>
       <button
         type="submit"
-        className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="btn-primary"
       >
         Save
       </button>

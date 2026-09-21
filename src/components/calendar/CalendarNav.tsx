@@ -17,35 +17,35 @@ export default function CalendarNav({ view, anchor }: { view: ViewType; anchor: 
       <div className="flex items-center gap-2">
         <Link
           href={hrefFor(view, prev)}
-          className="rounded border border-zinc-300 px-2 py-1 text-sm text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          className="btn-secondary"
         >
           ← Prev
         </Link>
         <Link
           href={hrefFor(view, todayISO())}
-          className="rounded border border-zinc-300 px-2 py-1 text-sm text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          className="btn-secondary"
         >
           Today
         </Link>
         <Link
           href={hrefFor(view, next)}
-          className="rounded border border-zinc-300 px-2 py-1 text-sm text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          className="btn-secondary"
         >
           Next →
         </Link>
-        <span className="ml-2 text-sm font-medium text-zinc-900 dark:text-zinc-50">
+        <span className="ml-2 text-sm font-medium text-ink">
           {formatRangeLabel(view, anchor)}
         </span>
       </div>
-      <div className="flex items-center gap-1 rounded border border-zinc-300 p-0.5 dark:border-zinc-700">
+      <div className="flex items-center gap-1 rounded border border-ink/20 p-0.5">
         {VIEWS.map((v) => (
           <Link
             key={v}
             href={hrefFor(v, anchor)}
             className={`rounded px-3 py-1 text-sm capitalize ${
               v === view
-                ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-                : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                ? "bg-wave text-ink-inverse"
+                : "text-ink/70 hover:bg-foam/60"
             }`}
           >
             {v}

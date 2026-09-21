@@ -23,9 +23,9 @@ export type ScheduleEntry = {
 };
 
 const STATUS_CLASS = {
-  active: "text-green-700 dark:text-green-400",
+  active: "text-confirmed",
   tentative: "text-amber-700 dark:text-amber-400",
-  cancelled: "text-zinc-400",
+  cancelled: "text-ink/40",
   closed: "text-red-700 dark:text-red-400",
 };
 

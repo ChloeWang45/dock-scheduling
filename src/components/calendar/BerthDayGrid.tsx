@@ -47,14 +47,14 @@ export default function BerthDayGrid({
   const today = todayISO();
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+    <div className="table-shell-x">
       <div style={{ minWidth: LABEL_WIDTH + days.length * dayWidth }}>
         {/* Header */}
         <div
-          className="grid border-b border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900"
+          className="grid border-b border-ink/15 bg-foam/40"
           style={{ gridTemplateColumns: gridCols }}
         >
-          <div className="sticky left-0 z-10 bg-zinc-100 px-3 py-2 text-xs font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+          <div className="sticky left-0 z-10 bg-foam/40 px-3 py-2 text-xs font-medium text-ink/70">
             Berth
           </div>
           {days.map((day) => {
@@ -63,10 +63,8 @@ export default function BerthDayGrid({
             return (
               <div
                 key={day}
-                className={`border-l border-zinc-200 py-1 text-center text-xs dark:border-zinc-800 ${
-                  isToday
-                    ? "bg-blue-50 font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300"
-                    : "text-zinc-500 dark:text-zinc-400"
+                className={`border-l border-ink/15 py-1 text-center text-xs ${
+                  isToday ? "bg-wave/15 font-semibold text-wave" : "text-ink/60"
                 }`}
               >
                 <div>{label.top}</div>
@@ -85,10 +83,10 @@ export default function BerthDayGrid({
           return (
             <div
               key={berth.id}
-              className="grid border-b border-zinc-200 last:border-b-0 dark:border-zinc-800"
+              className="grid border-b border-ink/15 last:border-b-0"
               style={{ gridTemplateColumns: gridCols }}
             >
-              <div className="sticky left-0 z-10 flex items-center bg-white px-3 py-2 text-sm font-medium text-zinc-800 dark:bg-black dark:text-zinc-200">
+              <div className="sticky left-0 z-10 flex items-center bg-white px-3 py-2 text-sm font-medium text-ink">
                 {berth.name}
               </div>
               <div
@@ -105,16 +103,14 @@ export default function BerthDayGrid({
                       <Link
                         key={day}
                         href={`/schedule/new?berthId=${berth.id}&date=${day}`}
-                        className={`border-l border-zinc-100 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-900/60 ${
-                          day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
+                        className={`border-l border-ink/10 transition-colors duration-150 hover:bg-foam/40 ${
+                          day === today ? "bg-wave/10" : ""
                         }`}
                       />
                     ) : (
                       <div
                         key={day}
-                        className={`border-l border-zinc-100 dark:border-zinc-900 ${
-                          day === today ? "bg-blue-50/40 dark:bg-blue-950/20" : ""
-                        }`}
+                        className={`border-l border-ink/10 ${day === today ? "bg-wave/10" : ""}`}
                       />
                     ),
                   )}
@@ -136,8 +132,8 @@ export default function BerthDayGrid({
                     top: laneOf[i] * LANE_HEIGHT + 3,
                     height: LANE_HEIGHT - 4,
                   };
-                  const barClass = `absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm ${block.colorClass} ${
-                    block.ringed ? "ring-2 ring-red-500" : ""
+                  const barClass = `absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm transition-transform duration-150 hover:-translate-y-px ${block.colorClass} ${
+                    block.ringed ? "ring-2 ring-conflict" : ""
                   }`;
 
                   return editable ? (

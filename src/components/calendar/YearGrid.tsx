@@ -18,10 +18,10 @@ function monthRange(year: string, monthIndex: number): [string, string] {
 }
 
 function intensityClass(count: number) {
-  if (count === 0) return "bg-transparent text-zinc-300 dark:text-zinc-700";
-  if (count <= 2) return "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300";
-  if (count <= 5) return "bg-green-300 text-green-900 dark:bg-green-800 dark:text-green-100";
-  return "bg-green-500 text-white dark:bg-green-600";
+  if (count === 0) return "bg-transparent text-ink/25";
+  if (count <= 2) return "bg-foam text-abyss";
+  if (count <= 5) return "bg-wave/70 text-ink-inverse";
+  return "bg-abyss text-ink-inverse";
 }
 
 export default function YearGrid({
@@ -34,9 +34,9 @@ export default function YearGrid({
   blocks: OccupancyBlock[];
 }) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+    <div className="table-shell-x">
       <table className="w-full min-w-[720px] border-collapse text-sm">
-        <thead className="bg-zinc-100 text-xs text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+        <thead className="table-head text-xs">
           <tr>
             <th className="px-3 py-2 text-left font-medium">Berth</th>
             {MONTH_LABELS.map((m) => (
@@ -46,10 +46,10 @@ export default function YearGrid({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+        <tbody className="table-divide">
           {berths.map((berth) => (
             <tr key={berth.id}>
-              <td className="px-3 py-2 font-medium text-zinc-800 dark:text-zinc-200">
+              <td className="px-3 py-2 font-medium table-row">
                 {berth.name}
               </td>
               {MONTH_LABELS.map((_, monthIndex) => {
