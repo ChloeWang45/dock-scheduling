@@ -25,12 +25,16 @@ export default function BookingForm({
   berths,
   vessels,
   booking,
+  defaultBerthId,
+  defaultDate,
   excludeBookingId,
   action,
 }: {
   berths: Berth[];
   vessels: Vessel[];
   booking?: Booking;
+  defaultBerthId?: string;
+  defaultDate?: string;
   excludeBookingId?: string;
   action: (state: BookingFormState, formData: FormData) => Promise<BookingFormState>;
 }) {
@@ -39,10 +43,12 @@ export default function BookingForm({
     undefined,
   );
 
-  const [berthId, setBerthId] = useState(booking?.berthId ?? berths[0]?.id ?? "");
+  const [berthId, setBerthId] = useState(
+    booking?.berthId ?? defaultBerthId ?? berths[0]?.id ?? "",
+  );
   const [vesselId, setVesselId] = useState(booking?.vesselId ?? vessels[0]?.id ?? "");
-  const [startDate, setStartDate] = useState(booking?.startDate ?? "");
-  const [endDate, setEndDate] = useState(booking?.endDate ?? "");
+  const [startDate, setStartDate] = useState(booking?.startDate ?? defaultDate ?? "");
+  const [endDate, setEndDate] = useState(booking?.endDate ?? defaultDate ?? "");
   const [isAllDay, setIsAllDay] = useState(booking?.isAllDay ?? true);
   const [overridden, setOverridden] = useState(false);
   const [overrideNote, setOverrideNote] = useState("");

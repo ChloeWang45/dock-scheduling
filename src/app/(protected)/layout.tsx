@@ -25,6 +25,12 @@ export default async function ProtectedLayout({
             Dock Scheduling
           </span>
           <Link
+            href="/calendar"
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          >
+            Calendar
+          </Link>
+          <Link
             href="/berths"
             className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
           >
@@ -60,7 +66,7 @@ export default async function ProtectedLayout({
           </form>
         </div>
       </nav>
-      <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
     </div>
   );
 }
