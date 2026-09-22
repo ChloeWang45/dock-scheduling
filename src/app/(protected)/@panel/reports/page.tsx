@@ -11,8 +11,7 @@ export default async function ReportsPage() {
         </h1>
         <p className="mt-1 text-sm text-ink/60">
           Days per berth per year with at least one active booking, event, or closure.
-          Replaces the hand-tallied &quot;8YR Dock Summary&quot; tab — a day counts once even if
-          multiple entries overlap it.
+          A day counts once even if multiple entries overlap it.
         </p>
       </div>
 

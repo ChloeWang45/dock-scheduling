@@ -21,7 +21,7 @@ export default async function AccountPage() {
         <p className="mb-4 text-sm text-ink/60">
           {user.email} · {user.role}
         </p>
-        <ProfileForm name={user.name} title={user.title} />
+        <ProfileForm firstName={user.firstName} lastName={user.lastName} title={user.title} />
       </div>
       <div>
         <h2 className="mb-4 section-title">

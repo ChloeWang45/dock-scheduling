@@ -16,7 +16,12 @@ export const userStatus = pgEnum("user_status", ["pending", "approved"]);
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
+  // Kept in sync with firstName/lastName; used everywhere a display name is
+  // needed (staff attribution on bookings/events/closures, admin lists) so
+  // those call sites don't need to know about the first/last split.
   name: text("name").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull().default(""),
   title: text("title"),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),

@@ -12,6 +12,7 @@ async function seedAdmin() {
     .insert(users)
     .values({
       name: "Admin",
+      firstName: "Admin",
       email,
       passwordHash,
       role: "admin",

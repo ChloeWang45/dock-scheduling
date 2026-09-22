@@ -29,8 +29,16 @@ export default function SignUpPage() {
           </p>
         )}
 
-        <label className={labelClass}>Name</label>
-        <input name="name" type="text" required autoFocus className={inputClass} />
+        <div className="mb-4 grid grid-cols-2 gap-4">
+          <div>
+            <label className={labelClass}>First name</label>
+            <input name="firstName" type="text" required autoFocus className="text-input" />
+          </div>
+          <div>
+            <label className={labelClass}>Last name</label>
+            <input name="lastName" type="text" className="text-input" />
+          </div>
+        </div>
 
         <label className={labelClass}>Title (optional)</label>
         <input

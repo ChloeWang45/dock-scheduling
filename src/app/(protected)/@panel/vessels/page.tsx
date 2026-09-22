@@ -4,11 +4,24 @@ import { vessels } from "@/db/schema";
 import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { setVesselActive } from "@/app/(protected)/vessels/actions";
+import { compareByTextRelevance, matchesText } from "@/lib/text-search";
+import ListSearch from "@/components/ListSearch";
 
-export default async function VesselsPage() {
+export default async function VesselsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ vq?: string }>;
+}) {
   const session = await auth();
   const editable = canWrite(session!.user.role);
-  const allVessels = await db.select().from(vessels).orderBy(vessels.name);
+  const { vq: rawQ } = await searchParams;
+  const q = (rawQ ?? "").trim();
+
+  let allVessels = await db.select().from(vessels).orderBy(vessels.name);
+  if (q) {
+    const fieldsOf = (v: (typeof allVessels)[number]) => [v.name, v.type, v.operator];
+    allVessels = allVessels.filter((v) => matchesText(fieldsOf(v), q)).sort(compareByTextRelevance(fieldsOf, q));
+  }
 
   return (
     <div>
@@ -25,6 +38,14 @@ export default async function VesselsPage() {
           </Link>
         )}
       </div>
+      <ListSearch action="/vessels" paramName="vq" q={q} placeholder="Search vessels…" />
+      {q && (
+        <p className="mb-3 text-sm text-ink/60">
+          {allVessels.length === 0
+            ? `No vessels match "${q}".`
+            : `${allVessels.length} result${allVessels.length === 1 ? "" : "s"} for "${q}".`}
+        </p>
+      )}
       <div className="table-shell">
         <table className="w-full text-left text-sm">
           <thead className="table-head">

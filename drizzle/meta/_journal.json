@@ -71,6 +71,13 @@
       "when": 1790018370848,
       "tag": "0009_daffy_frog_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790035692426,
+      "tag": "0010_minor_chameleon",
+      "breakpoints": true
     }
   ]
 }

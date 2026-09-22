@@ -23,10 +23,12 @@ const RAIL_ITEMS = [
 
 export default function NavRail({
   role,
+  userName,
   userEmail,
   logout,
 }: {
   role: "admin" | "staff" | "viewer";
+  userName: string;
   userEmail: string;
   logout: () => void;
 }) {
@@ -83,7 +85,7 @@ export default function NavRail({
         >
           <CompassIcon className="h-5 w-5 shrink-0" />
           <span className="truncate text-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            {userEmail}
+            {userName}
           </span>
         </Link>
         <form action={logout}>

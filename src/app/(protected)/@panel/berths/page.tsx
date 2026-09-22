@@ -4,11 +4,25 @@ import { berths } from "@/db/schema";
 import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { setBerthActive } from "@/app/(protected)/berths/actions";
+import { compareByTextRelevance, matchesText } from "@/lib/text-search";
+import ListSearch from "@/components/ListSearch";
 
-export default async function BerthsPage() {
+export default async function BerthsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bq?: string }>;
+}) {
   const session = await auth();
   const editable = canWrite(session!.user.role);
-  const allBerths = await db.select().from(berths).orderBy(berths.name);
+  const { bq: rawQ } = await searchParams;
+  const q = (rawQ ?? "").trim();
+
+  let allBerths = await db.select().from(berths).orderBy(berths.name);
+  if (q) {
+    allBerths = allBerths
+      .filter((b) => matchesText([b.name], q))
+      .sort(compareByTextRelevance((b) => [b.name], q));
+  }
 
   return (
     <div>
@@ -25,6 +39,14 @@ export default async function BerthsPage() {
           </Link>
         )}
       </div>
+      <ListSearch action="/berths" paramName="bq" q={q} placeholder="Search berths…" />
+      {q && (
+        <p className="mb-3 text-sm text-ink/60">
+          {allBerths.length === 0
+            ? `No berths match "${q}".`
+            : `${allBerths.length} result${allBerths.length === 1 ? "" : "s"} for "${q}".`}
+        </p>
+      )}
       <div className="table-shell">
         <table className="w-full text-left text-sm">
           <thead className="table-head">

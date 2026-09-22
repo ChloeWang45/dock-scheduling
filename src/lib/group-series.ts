@@ -5,6 +5,10 @@
 export function groupBySeries<T extends { id: string; seriesId: string | null; startDate: string }>(
   rows: T[],
   todayISO: string,
+  // Orders the resulting groups by their primary row. Defaults to
+  // soonest-first (most recent startDate first); pass one to rank by
+  // something else, e.g. search relevance.
+  compareGroups?: (a: T, b: T) => number,
 ): { primary: T; extras: T[] }[] {
   const standalone: T[] = [];
   const seriesGroups = new Map<string, T[]>();
@@ -36,6 +40,10 @@ export function groupBySeries<T extends { id: string; seriesId: string | null; s
     result.push({ primary, extras });
   }
 
-  result.sort((a, b) => b.primary.startDate.localeCompare(a.primary.startDate));
+  if (compareGroups) {
+    result.sort((a, b) => compareGroups(a.primary, b.primary));
+  } else {
+    result.sort((a, b) => b.primary.startDate.localeCompare(a.primary.startDate));
+  }
   return result;
 }

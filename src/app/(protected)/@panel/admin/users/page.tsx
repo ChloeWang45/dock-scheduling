@@ -3,12 +3,24 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { requireAdmin } from "@/lib/authz";
 import { approveUser, changeUserRole, denyUser } from "@/app/(protected)/admin/users/actions";
+import { compareByTextRelevance, matchesText } from "@/lib/text-search";
+import ListSearch from "@/components/ListSearch";
 
 const selectClass = "rounded border border-ink/20 bg-white px-2 py-1 text-sm text-ink";
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ uq?: string }>;
+}) {
   const currentUser = await requireAdmin();
-  const allUsers = await db.select().from(users).orderBy(asc(users.createdAt));
+  const { uq: rawQ } = await searchParams;
+  const q = (rawQ ?? "").trim();
+  let allUsers = await db.select().from(users).orderBy(asc(users.createdAt));
+  if (q) {
+    const fieldsOf = (u: (typeof allUsers)[number]) => [u.name, u.email, u.role];
+    allUsers = allUsers.filter((u) => matchesText(fieldsOf(u), q)).sort(compareByTextRelevance(fieldsOf, q));
+  }
 
   const pending = allUsers.filter((u) => u.status === "pending");
   const approved = allUsers.filter((u) => u.status === "approved");
@@ -21,6 +33,8 @@ export default async function AdminUsersPage() {
           Approve new signups and manage roles.
         </p>
       </div>
+
+      <ListSearch action="/admin/users" paramName="uq" q={q} placeholder="Search users…" />
 
       <div>
         <h2 className="mb-4 section-title">

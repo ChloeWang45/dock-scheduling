@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { getScheduleEntries, type EntryType, type ScheduleEntry } from "@/lib/schedule-entries";
 import { groupBySeries } from "@/lib/group-series";
+import { compareByRelevance, matchesQuery } from "@/lib/search-entries";
 import { todayISO } from "@/lib/calendar-dates";
 import SeriesGroup from "@/components/SeriesGroup";
 import ScheduleSearch from "@/components/ScheduleSearch";
@@ -38,30 +39,24 @@ function cancelActionFor(entry: ScheduleEntry) {
 export default async function SchedulePage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string; q?: string }>;
+  searchParams: Promise<{ type?: string; sq?: string }>;
 }) {
   const session = await auth();
   const editable = canWrite(session!.user.role);
-  const { type, q: rawQ } = await searchParams;
+  const { type, sq: rawQ } = await searchParams;
   const activeFilter: "all" | EntryType =
     type === "booking" || type === "event" || type === "closure" ? type : "all";
   const q = (rawQ ?? "").trim();
 
+  const today = todayISO();
   const allEntries = await getScheduleEntries();
   let entries =
     activeFilter === "all" ? allEntries : allEntries.filter((e) => e.type === activeFilter);
   if (q) {
-    const needle = q.toLowerCase();
-    entries = entries.filter(
-      (e) =>
-        e.title.toLowerCase().includes(needle) ||
-        (e.subtitle?.toLowerCase().includes(needle) ?? false) ||
-        e.berthName.toLowerCase().includes(needle) ||
-        e.statusLabel.toLowerCase().includes(needle),
-    );
+    entries = entries.filter((e) => matchesQuery(e, q));
   }
 
-  const groups = groupBySeries(entries, todayISO());
+  const groups = groupBySeries(entries, today, q ? compareByRelevance(q, today) : undefined);
   const columnCount = editable ? 7 : 6;
 
   function renderRow(entry: ScheduleEntry) {
@@ -146,7 +141,7 @@ export default async function SchedulePage({
             key={f.value}
             href={
               (f.value === "all" ? "/schedule" : `/schedule?type=${f.value}`) +
-              (q ? `${f.value === "all" ? "?" : "&"}q=${encodeURIComponent(q)}` : "")
+              (q ? `${f.value === "all" ? "?" : "&"}sq=${encodeURIComponent(q)}` : "")
             }
             className={`rounded px-3 py-1 text-sm ${
               activeFilter === f.value
@@ -161,9 +156,9 @@ export default async function SchedulePage({
 
       {q && (
         <p className="mb-3 text-sm text-ink/60">
-          {entries.length === 0
+          {groups.length === 0
             ? `No bookings, events, or closures match "${q}".`
-            : `${entries.length} result${entries.length === 1 ? "" : "s"} for "${q}".`}
+            : `${groups.length} result${groups.length === 1 ? "" : "s"} for "${q}".`}
         </p>
       )}
 

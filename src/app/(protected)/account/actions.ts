@@ -21,14 +21,16 @@ export async function updateProfile(
   formData: FormData,
 ): Promise<ActionState> {
   const userId = await requireUserId();
-  const name = String(formData.get("name") ?? "").trim();
+  const firstName = String(formData.get("firstName") ?? "").trim();
+  const lastName = String(formData.get("lastName") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim() || null;
 
-  if (!name) {
-    return { error: "Name is required." };
+  if (!firstName) {
+    return { error: "First name is required." };
   }
 
-  await db.update(users).set({ name, title }).where(eq(users.id, userId));
+  const name = [firstName, lastName].filter(Boolean).join(" ");
+  await db.update(users).set({ firstName, lastName, name, title }).where(eq(users.id, userId));
   revalidatePath("/account");
   return { success: "Profile updated." };
 }

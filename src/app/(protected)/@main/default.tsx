@@ -6,12 +6,15 @@ import { auth } from "@/auth";
 import { canWrite } from "@/lib/authz";
 import { getVisibleRange, todayISO, type ViewType } from "@/lib/calendar-dates";
 import { formatStaffName } from "@/lib/user-display";
-import { getScheduleEntries, type EntryType } from "@/lib/schedule-entries";
+import { getScheduleEntries, type EntryType, type ScheduleEntry } from "@/lib/schedule-entries";
+import { groupBySeries } from "@/lib/group-series";
+import { compareByRelevance, matchesQuery } from "@/lib/search-entries";
 import CalendarNav from "@/components/calendar/CalendarNav";
 import CalendarSearch from "@/components/calendar/CalendarSearch";
 import BerthDayGrid, { type OccupancyBlock } from "@/components/calendar/BerthDayGrid";
 import YearGrid from "@/components/calendar/YearGrid";
 import Legend from "@/components/calendar/Legend";
+import SeriesGroup from "@/components/SeriesGroup";
 
 const TYPE_LABELS: Record<EntryType, string> = {
   booking: "Booking",
@@ -48,17 +51,50 @@ export default async function CalendarPage({
   const q = (params.q ?? "").trim();
 
   if (q) {
+    const today = todayISO();
     const allEntries = await getScheduleEntries();
-    const needle = q.toLowerCase();
-    const matches = allEntries
-      .filter(
-        (e) =>
-          e.title.toLowerCase().includes(needle) ||
-          (e.subtitle?.toLowerCase().includes(needle) ?? false) ||
-          e.berthName.toLowerCase().includes(needle) ||
-          e.statusLabel.toLowerCase().includes(needle),
-      )
-      .sort((a, b) => b.startDate.localeCompare(a.startDate));
+    const matches = allEntries.filter((e) => matchesQuery(e, q));
+    const groups = groupBySeries(matches, today, compareByRelevance(q, today));
+
+    function renderRow(entry: ScheduleEntry) {
+      return (
+        <tr key={`${entry.type}-${entry.id}`} className="table-row">
+          <td className="px-4 py-2">
+            <span className={TYPE_BADGE_CLASS[entry.type]}>{TYPE_LABELS[entry.type]}</span>
+          </td>
+          <td className="px-4 py-2">{entry.berthName}</td>
+          <td className="px-4 py-2">
+            {entry.title}
+            {entry.subtitle && <span className="text-ink/60"> ({entry.subtitle})</span>}
+          </td>
+          <td className="px-4 py-2">
+            {entry.startDate === entry.endDate
+              ? entry.startDate
+              : `${entry.startDate} – ${entry.endDate}`}
+            {entry.seriesId && (
+              <span title="Part of a recurring series" className="ml-1.5 text-ink/40">
+                ↻
+              </span>
+            )}
+          </td>
+          <td className="px-4 py-2">
+            <span className={entry.statusClass}>{entry.statusLabel}</span>
+          </td>
+          <td className="px-4 py-2 text-right">
+            <div className="flex items-center justify-end gap-3">
+              <Link href={`/calendar?view=day&date=${entry.startDate}`} className="link-action">
+                View in calendar
+              </Link>
+              {editable && (
+                <Link href={entry.editHref} className="link-action">
+                  Edit
+                </Link>
+              )}
+            </div>
+          </td>
+        </tr>
+      );
+    }
 
     return (
       <div>
@@ -67,11 +103,11 @@ export default async function CalendarPage({
         </div>
         <CalendarSearch q={q} view={view} anchor={anchor} />
         <p className="mb-4 text-sm text-ink/60">
-          {matches.length === 0
+          {groups.length === 0
             ? `No bookings, events, or closures match "${q}".`
-            : `${matches.length} result${matches.length === 1 ? "" : "s"} for "${q}".`}
+            : `${groups.length} result${groups.length === 1 ? "" : "s"} for "${q}".`}
         </p>
-        {matches.length > 0 && (
+        {groups.length > 0 && (
           <div className="table-shell">
             <table className="w-full text-left text-sm">
               <thead className="table-head">
@@ -85,47 +121,14 @@ export default async function CalendarPage({
                 </tr>
               </thead>
               <tbody className="table-divide">
-                {matches.map((entry) => (
-                  <tr key={`${entry.type}-${entry.id}`} className="table-row">
-                    <td className="px-4 py-2">
-                      <span
-                        className={TYPE_BADGE_CLASS[entry.type]}
-                      >
-                        {TYPE_LABELS[entry.type]}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2">{entry.berthName}</td>
-                    <td className="px-4 py-2">
-                      {entry.title}
-                      {entry.subtitle && <span className="text-ink/60"> ({entry.subtitle})</span>}
-                    </td>
-                    <td className="px-4 py-2">
-                      {entry.startDate === entry.endDate
-                        ? entry.startDate
-                        : `${entry.startDate} – ${entry.endDate}`}
-                    </td>
-                    <td className="px-4 py-2">
-                      <span className={entry.statusClass}>{entry.statusLabel}</span>
-                    </td>
-                    <td className="px-4 py-2 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <Link
-                          href={`/calendar?view=day&date=${entry.startDate}`}
-                          className="link-action"
-                        >
-                          View in calendar
-                        </Link>
-                        {editable && (
-                          <Link
-                            href={entry.editHref}
-                            className="link-action"
-                          >
-                            Edit
-                          </Link>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                {groups.map(({ primary, extras }) => (
+                  <SeriesGroup
+                    key={`${primary.type}-${primary.id}`}
+                    primaryRow={renderRow(primary)}
+                    extraRows={extras.map(renderRow)}
+                    extraCount={extras.length}
+                    columnCount={6}
+                  />
                 ))}
               </tbody>
             </table>

@@ -4,15 +4,12 @@ export default function ScheduleSearch({ q, type }: { q: string; type: string })
       {type !== "all" && <input type="hidden" name="type" value={type} />}
       <input
         type="text"
-        name="q"
+        name="sq"
         defaultValue={q}
         placeholder="Search bookings, events, closures…"
         className="w-72 text-input"
       />
-      <button
-        type="submit"
-        className="btn-secondary"
-      >
+      <button type="submit" className="btn-secondary">
         Search
       </button>
       {q && (

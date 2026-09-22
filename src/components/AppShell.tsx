@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NavRail from "@/components/NavRail";
 import { CloseIcon } from "@/components/icons";
 
-const DEFAULT_PANEL_WIDTH = 460;
+const DEFAULT_PANEL_WIDTH = 620;
 const MIN_PANEL_WIDTH = 320;
 const MAX_PANEL_WIDTH = 880;
 const STORAGE_KEY = "dockScheduling.panelWidth";
@@ -15,12 +15,14 @@ export default function AppShell({
   main,
   panel,
   role,
+  userName,
   userEmail,
   logout,
 }: {
   main: React.ReactNode;
   panel: React.ReactNode;
   role: "admin" | "staff" | "viewer";
+  userName: string;
   userEmail: string;
   logout: () => void;
 }) {
@@ -76,7 +78,7 @@ export default function AppShell({
 
   return (
     <div className="flex h-screen overflow-hidden bg-paper">
-      <NavRail role={role} userEmail={userEmail} logout={logout} />
+      <NavRail role={role} userName={userName} userEmail={userEmail} logout={logout} />
       <div className="flex min-w-0 flex-1 overflow-hidden">
         <div
           className="flex shrink-0 overflow-hidden transition-[width] duration-200 ease-out"
