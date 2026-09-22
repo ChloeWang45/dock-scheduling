@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requestPasswordReset } from "./actions";
+import TopBanner from "@/components/TopBanner";
 
 export default async function ForgotPasswordPage({
   searchParams,
@@ -9,7 +10,9 @@ export default async function ForgotPasswordPage({
   const { sent } = await searchParams;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper">
+    <div className="flex min-h-screen flex-col bg-paper">
+      <TopBanner />
+      <div className="flex flex-1 items-center justify-center">
       <div className="w-full max-w-sm card">
         <h1 className="mb-6 page-title">
           Reset your password
@@ -45,6 +48,7 @@ export default async function ForgotPasswordPage({
             Back to login
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

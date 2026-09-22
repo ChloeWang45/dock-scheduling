@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useActionState } from "react";
 import { resetPassword } from "./actions";
+import TopBanner from "@/components/TopBanner";
 
 const inputClass =
   "mb-4 text-input";
@@ -23,7 +24,9 @@ function ResetPasswordForm() {
   const [state, formAction, isPending] = useActionState(resetPassword, undefined);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper">
+    <div className="flex min-h-screen flex-col bg-paper">
+      <TopBanner />
+      <div className="flex flex-1 items-center justify-center">
       <form
         action={formAction}
         className="w-full max-w-sm card"
@@ -70,6 +73,7 @@ function ResetPasswordForm() {
           </Link>
         </p>
       </form>
+      </div>
     </div>
   );
 }

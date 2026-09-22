@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { signUp } from "./actions";
+import TopBanner from "@/components/TopBanner";
 
 const inputClass =
   "mb-4 text-input";
@@ -12,7 +13,9 @@ export default function SignUpPage() {
   const [state, formAction, isPending] = useActionState(signUp, undefined);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper">
+    <div className="flex min-h-screen flex-col bg-paper">
+      <TopBanner />
+      <div className="flex flex-1 items-center justify-center">
       <form
         action={formAction}
         className="w-full max-w-sm card"
@@ -74,6 +77,7 @@ export default function SignUpPage() {
           </Link>
         </p>
       </form>
+      </div>
     </div>
   );
 }

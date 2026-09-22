@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthError, CredentialsSignin } from "next-auth";
 import { signIn } from "@/auth";
+import TopBanner from "@/components/TopBanner";
 
 export default async function LoginPage({
   searchParams,
@@ -37,7 +38,9 @@ export default async function LoginPage({
         : null;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-paper">
+    <div className="flex min-h-screen flex-col bg-paper">
+      <TopBanner />
+      <div className="flex flex-1 items-center justify-center">
       <form
         action={login}
         className="w-full max-w-sm card"
@@ -98,6 +101,7 @@ export default async function LoginPage({
           </Link>
         </p>
       </form>
+      </div>
     </div>
   );
 }

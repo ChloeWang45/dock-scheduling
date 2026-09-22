@@ -4,12 +4,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NavRail from "@/components/NavRail";
+import TopBanner from "@/components/TopBanner";
 import { CloseIcon } from "@/components/icons";
 
 const DEFAULT_PANEL_WIDTH = 620;
 const MIN_PANEL_WIDTH = 320;
 const MAX_PANEL_WIDTH = 880;
 const STORAGE_KEY = "dockScheduling.panelWidth";
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
 
 export default function AppShell({
   main,
@@ -28,6 +44,7 @@ export default function AppShell({
 }) {
   const pathname = usePathname();
   const panelOpen = pathname !== "/calendar";
+  const isDesktop = useIsDesktop();
   const [panelWidth, setPanelWidth] = useState(DEFAULT_PANEL_WIDTH);
   const dragging = useRef(false);
 
@@ -76,40 +93,60 @@ export default function AppShell({
     window.addEventListener("mouseup", onUp);
   }, []);
 
+  const closeLink = (
+    <div className="mb-4 flex justify-end">
+      <Link
+        href="/calendar"
+        className="flex items-center gap-1 text-sm text-ink/50 transition-colors hover:text-ink"
+        title="Close panel"
+      >
+        <CloseIcon className="h-4 w-4" />
+        Close
+      </Link>
+    </div>
+  );
+
   return (
-    <div className="flex h-screen overflow-hidden bg-paper">
-      <NavRail role={role} userName={userName} userEmail={userEmail} logout={logout} />
-      <div className="flex min-w-0 flex-1 overflow-hidden">
-        <div
-          className="flex shrink-0 overflow-hidden transition-[width] duration-200 ease-out"
-          style={{ width: panelOpen ? panelWidth : 0 }}
-        >
-          <div className="h-full min-w-0 flex-1 overflow-y-auto bg-paper" style={{ width: panelWidth }}>
+    <div className="flex h-screen flex-col overflow-hidden bg-paper">
+      <TopBanner />
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden md:flex-row">
+        <NavRail role={role} userName={userName} userEmail={userEmail} logout={logout} />
+
+        {isDesktop ? (
+          <div className="flex min-w-0 flex-1 overflow-hidden">
+            <div
+              className="flex shrink-0 overflow-hidden transition-[width] duration-200 ease-out"
+              style={{ width: panelOpen ? panelWidth : 0 }}
+            >
+              <div
+                className="h-full min-w-0 flex-1 overflow-y-auto bg-paper"
+                style={{ width: panelWidth }}
+              >
+                {panelOpen && (
+                  <div className="p-6">
+                    {closeLink}
+                    {panel}
+                  </div>
+                )}
+              </div>
+              <div onMouseDown={onDragStart} className="relative w-1 shrink-0 cursor-col-resize">
+                <div className="absolute inset-y-0 -left-1.5 -right-1.5 cursor-col-resize" />
+                <div className="h-full w-full bg-ink/10 transition-colors duration-150 hover:bg-wave/60" />
+              </div>
+            </div>
+            <div className="min-w-0 flex-1 overflow-y-auto p-6">{main}</div>
+          </div>
+        ) : (
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
             {panelOpen && (
-              <div className="p-6">
-                <div className="mb-4 flex justify-end">
-                  <Link
-                    href="/calendar"
-                    className="flex items-center gap-1 text-sm text-ink/50 transition-colors hover:text-ink"
-                    title="Close panel"
-                  >
-                    <CloseIcon className="h-4 w-4" />
-                    Close
-                  </Link>
-                </div>
+              <div className="w-full shrink-0 border-b border-ink/15 bg-paper p-4">
+                {closeLink}
                 {panel}
               </div>
             )}
+            <div className="w-full flex-1 p-4">{main}</div>
           </div>
-          <div
-            onMouseDown={onDragStart}
-            className="relative w-1 shrink-0 cursor-col-resize"
-          >
-            <div className="absolute inset-y-0 -left-1.5 -right-1.5 cursor-col-resize" />
-            <div className="h-full w-full bg-ink/10 transition-colors duration-150 hover:bg-wave/60" />
-          </div>
-        </div>
-        <div className="min-w-0 flex-1 overflow-y-auto p-6">{main}</div>
+        )}
       </div>
     </div>
   );
