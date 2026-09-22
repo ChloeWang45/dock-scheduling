@@ -8,6 +8,7 @@ import {
   ChartIcon,
   CompassIcon,
   ExitIcon,
+  GearIcon,
   PeopleIcon,
   ScheduleIcon,
   WaveIcon,
@@ -37,6 +38,7 @@ export default function NavRail({
   const items = [...RAIL_ITEMS];
   if (role === "admin") {
     items.push({ href: "/admin/users", label: "Users", icon: PeopleIcon });
+    items.push({ href: "/settings", label: "Settings", icon: GearIcon });
   }
 
   return (

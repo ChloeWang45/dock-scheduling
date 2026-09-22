@@ -1,8 +1,5 @@
 import { berths, vessels } from "@/db/schema";
-
-const DEFAULT_LOA_BUFFER = 0.15;
-const DEFAULT_BEAM_BUFFER = 0.15;
-const DEFAULT_UKC_MARGIN_FT = 1;
+import { HARD_CODED_FIT_DEFAULTS, type FitDefaults } from "@/lib/fit-settings";
 
 type Berth = typeof berths.$inferSelect;
 type Vessel = typeof vessels.$inferSelect;
@@ -13,11 +10,11 @@ export type FitIssue = {
   message: string;
 };
 
-export function checkFit(vessel: Vessel, berth: Berth): FitIssue[] {
+export function checkFit(vessel: Vessel, berth: Berth, defaults: FitDefaults = HARD_CODED_FIT_DEFAULTS): FitIssue[] {
   const issues: FitIssue[] = [];
-  const loaBuffer = berth.loaBufferPct ?? DEFAULT_LOA_BUFFER;
-  const beamBuffer = berth.beamBufferPct ?? DEFAULT_BEAM_BUFFER;
-  const ukcMargin = berth.ukcMarginFt ?? DEFAULT_UKC_MARGIN_FT;
+  const loaBuffer = berth.loaBufferPct ?? defaults.loaBufferPct;
+  const beamBuffer = berth.beamBufferPct ?? defaults.beamBufferPct;
+  const ukcMargin = berth.ukcMarginFt ?? defaults.ukcMarginFt;
 
   if (vessel.loaFt == null || berth.lengthFt == null) {
     issues.push({

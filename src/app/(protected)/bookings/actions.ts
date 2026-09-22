@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { berths, bookings, recurrenceSeries, vessels } from "@/db/schema";
 import { checkFit, type FitIssue } from "@/lib/booking-validation";
 import { checkBerthConflicts, type ConflictIssue } from "@/lib/berth-conflict";
+import { getFitDefaults } from "@/lib/fit-settings";
 import { requireStaff } from "@/lib/authz";
 import { generateOccurrences, type RecurrenceRule } from "@/lib/recurrence";
 
@@ -31,6 +32,7 @@ export async function checkBookingIssues(input: {
   const [vessel] = await db.select().from(vessels).where(eq(vessels.id, input.vesselId)).limit(1);
   if (!berth || !vessel) return { conflicts: [], fitIssues: [] };
 
+  const fitDefaults = await getFitDefaults();
   const [conflicts, fitIssues] = await Promise.all([
     checkBerthConflicts({
       berthId: input.berthId,
@@ -40,7 +42,7 @@ export async function checkBookingIssues(input: {
         ? { table: "bookings", id: input.excludeBookingId }
         : undefined,
     }),
-    Promise.resolve(checkFit(vessel, berth)),
+    Promise.resolve(checkFit(vessel, berth, fitDefaults)),
   ]);
 
   return { conflicts, fitIssues };
@@ -108,6 +110,7 @@ async function issuesForExcludingSeries(
   const [vessel] = await db.select().from(vessels).where(eq(vessels.id, vesselId)).limit(1);
   if (!berth || !vessel) return [];
 
+  const fitDefaults = await getFitDefaults();
   const [conflicts, fitIssues] = await Promise.all([
     checkBerthConflicts({
       berthId,
@@ -115,7 +118,7 @@ async function issuesForExcludingSeries(
       endDate,
       excludeSourceIds: { table: "bookings", ids: excludeBookingIds },
     }),
-    Promise.resolve(checkFit(vessel, berth)),
+    Promise.resolve(checkFit(vessel, berth, fitDefaults)),
   ]);
   const violations = fitIssues.filter((f) => f.status === "violation");
   return [...conflicts.map((c) => c.message), ...violations.map((f) => f.message)];

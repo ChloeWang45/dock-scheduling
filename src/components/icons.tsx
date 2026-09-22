@@ -93,6 +93,22 @@ export function ExitIcon({ className }: IconProps) {
   );
 }
 
+export function GearIcon({ className }: IconProps) {
+  return (
+    <svg className={className} {...base}>
+      <circle cx="12" cy="12" r="3.25" />
+      <path d="M12 3.5v2.4" />
+      <path d="M12 18.1v2.4" />
+      <path d="M20.5 12h-2.4" />
+      <path d="M5.9 12H3.5" />
+      <path d="M17.7 6.3l-1.7 1.7" />
+      <path d="M8 16l-1.7 1.7" />
+      <path d="M17.7 17.7L16 16" />
+      <path d="M8 8L6.3 6.3" />
+    </svg>
+  );
+}
+
 export function CloseIcon({ className }: IconProps) {
   return (
     <svg className={className} {...base}>

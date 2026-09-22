@@ -13,6 +13,11 @@ function toNullableNumber(value: FormDataEntryValue | null): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function toNullablePercent(value: FormDataEntryValue | null): number | null {
+  const parsed = toNullableNumber(value);
+  return parsed === null ? null : parsed / 100;
+}
+
 function berthFromForm(formData: FormData) {
   return {
     name: String(formData.get("name") ?? "").trim(),
@@ -21,6 +26,9 @@ function berthFromForm(formData: FormData) {
     widthFt: toNullableNumber(formData.get("widthFt")),
     maxSimultaneousOccupants:
       Number(formData.get("maxSimultaneousOccupants")) || 1,
+    loaBufferPct: toNullablePercent(formData.get("loaBufferPct")),
+    beamBufferPct: toNullablePercent(formData.get("beamBufferPct")),
+    ukcMarginFt: toNullableNumber(formData.get("ukcMarginFt")),
   };
 }
 

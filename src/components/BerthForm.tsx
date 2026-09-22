@@ -4,6 +4,9 @@ type Berth = {
   depthAtLowTideFt: number | null;
   widthFt: number | null;
   maxSimultaneousOccupants: number;
+  loaBufferPct?: number | null;
+  beamBufferPct?: number | null;
+  ukcMarginFt?: number | null;
 };
 
 export default function BerthForm({
@@ -81,6 +84,51 @@ export default function BerthForm({
           defaultValue={berth?.maxSimultaneousOccupants ?? 1}
           className="w-32 text-input"
         />
+      </div>
+      <div className="rounded border border-ink/15 p-4">
+        <p className="label-text mb-3">
+          Fit check overrides <span className="text-ink/50">(optional — blank uses the facility default from Settings)</span>
+        </p>
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className="label-text">LOA buffer (%)</label>
+            <input
+              name="loaBufferPct"
+              type="number"
+              step="any"
+              min="0"
+              max="99"
+              defaultValue={berth?.loaBufferPct != null ? berth.loaBufferPct * 100 : ""}
+              placeholder="default"
+              className="text-input"
+            />
+          </div>
+          <div>
+            <label className="label-text">Beam buffer (%)</label>
+            <input
+              name="beamBufferPct"
+              type="number"
+              step="any"
+              min="0"
+              max="99"
+              defaultValue={berth?.beamBufferPct != null ? berth.beamBufferPct * 100 : ""}
+              placeholder="default"
+              className="text-input"
+            />
+          </div>
+          <div>
+            <label className="label-text">UKC margin (ft)</label>
+            <input
+              name="ukcMarginFt"
+              type="number"
+              step="any"
+              min="0"
+              defaultValue={berth?.ukcMarginFt ?? ""}
+              placeholder="default"
+              className="text-input"
+            />
+          </div>
+        </div>
       </div>
       <button
         type="submit"

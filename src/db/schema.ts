@@ -165,6 +165,19 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Single-row table (fixed id "global") holding the facility-wide fit-check
+// defaults used whenever a berth doesn't set its own loaBufferPct /
+// beamBufferPct / ukcMarginFt override. Editable from /settings (admin
+// only) — see src/lib/fit-settings.ts.
+export const fitSettings = pgTable("fit_settings", {
+  id: text("id").primaryKey(),
+  loaBufferPct: doublePrecision("loa_buffer_pct").notNull(),
+  beamBufferPct: doublePrecision("beam_buffer_pct").notNull(),
+  ukcMarginFt: doublePrecision("ukc_margin_ft").notNull(),
+  updatedByStaffId: uuid("updated_by_staff_id").references(() => users.id),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const ledgerSourceTable = pgEnum("ledger_source_table", [
   "bookings",
   "events",

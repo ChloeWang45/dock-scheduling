@@ -97,12 +97,21 @@ short raft-alongside that the harbor master has explicitly allowed).
 ### Fit checking
 
 `src/lib/booking-validation.ts` checks a vessel's LOA/beam/draft against a
-berth's length/width/depth-at-low-tide, with configurable buffers per berth
-(`loaBufferPct`, `beamBufferPct`, `ukcMarginFt`; defaults are 15% LOA
-buffer, 15% beam buffer, 1 ft under-keel clearance). Missing dimensions on
-either side produce an "unverified" notice rather than blocking the save —
-only an actual measured violation blocks it (subject to override, as
-above).
+berth's length/width/depth-at-low-tide, with a buffer/margin on each check
+(LOA buffer %, beam buffer %, under-keel-clearance margin in ft). Missing
+dimensions on either side produce an "unverified" notice rather than
+blocking the save — only an actual measured violation blocks it (subject
+to override, as above).
+
+The three values are configurable at two levels:
+
+- **Facility-wide defaults** — editable by admins at `/settings`, stored
+  in the single-row `fit_settings` table (`src/lib/fit-settings.ts`).
+  Ship with the historical hardcoded values (15% / 15% / 1 ft) until an
+  admin changes them.
+- **Per-berth overrides** — the `loaBufferPct`/`beamBufferPct`/
+  `ukcMarginFt` columns already on `berths`, editable on a berth's own
+  edit page; a blank value there falls back to the facility default.
 
 ## Feature tour
 
@@ -153,6 +162,9 @@ above).
 - **Admin → Users** (`/admin/users`) — approve/deny pending signups, change
   roles. There is no "delete an approved user" feature — see
   [Known limitations](#known-limitations).
+- **Admin → Settings** (`/settings`) — facility-wide fit-check defaults
+  (LOA buffer %, beam buffer %, under-keel-clearance margin); see
+  [Fit checking](#core-concepts).
 
 ## Layout & design system
 
@@ -240,7 +252,7 @@ src/
     index.ts    # Neon HTTP client + Drizzle instance
     seed.ts     # seeds an admin user + starter berths/vessels
   auth.ts        # NextAuth config (credentials provider, JWT callbacks)
-drizzle/          # SQL migrations (0000–0010) + drizzle-kit snapshots
+drizzle/          # SQL migrations (0000–0011) + drizzle-kit snapshots
 scripts/          # one-off data scripts (see Historical & synthetic data)
 ```
 
@@ -255,6 +267,7 @@ Defined in `src/db/schema.ts`; see that file for the exact columns. Tables:
 | `vessels` | The fleet: type (`R/V`/`OSV`/`F/V`/`M/Y`/`Barge`), LOA/draft/beam, operator/contact. |
 | `bookings`, `events`, `closures` | The three occupancy types (see [Core concepts](#core-concepts)). Each has `overridden`/`overrideNote` and an optional `seriesId`. |
 | `recurrence_series` | One row per recurring series (frequency, interval, end condition). |
+| `fit_settings` | Single-row (fixed id `"global"`) table holding the facility-wide fit-check defaults, editable at `/settings`. |
 | `berth_occupancy_ledger` | Trigger-maintained mirror of active bookings/events/closures; carries the two exclusion constraints that make double-booking prevention structural. Application code only ever reads it. |
 | `password_reset_tokens` | SHA-256-hashed, single-use, one-hour-expiry reset tokens. |
 
