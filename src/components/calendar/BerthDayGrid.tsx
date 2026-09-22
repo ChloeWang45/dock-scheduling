@@ -14,6 +14,8 @@ export type OccupancyBlock = {
   endDate: string;
   label: string;
   title: string;
+  tooltipHeading: string;
+  tooltipLines: string[];
   colorClass: string;
   ringed: boolean;
   href: string;
@@ -132,17 +134,31 @@ export default function BerthDayGrid({
                     top: laneOf[i] * LANE_HEIGHT + 3,
                     height: LANE_HEIGHT - 4,
                   };
-                  const barClass = `absolute flex items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm transition-transform duration-150 hover:-translate-y-px ${block.colorClass} ${
+                  const barClass = `flex h-full w-full items-center overflow-hidden rounded px-1.5 text-xs font-medium shadow-sm transition-transform duration-150 hover:-translate-y-px ${block.colorClass} ${
                     block.ringed ? "ring-2 ring-conflict" : ""
                   }`;
 
-                  return editable ? (
-                    <Link key={block.id} href={block.href} title={block.title} className={barClass} style={barStyle}>
-                      <span className="truncate">{block.label}</span>
-                    </Link>
-                  ) : (
-                    <div key={block.id} title={block.title} className={barClass} style={barStyle}>
-                      <span className="truncate">{block.label}</span>
+                  return (
+                    <div key={block.id} className="group/tip absolute" style={barStyle}>
+                      {editable ? (
+                        <Link href={block.href} aria-label={block.title} className={barClass}>
+                          <span className="truncate">{block.label}</span>
+                        </Link>
+                      ) : (
+                        <div aria-label={block.title} className={barClass}>
+                          <span className="truncate">{block.label}</span>
+                        </div>
+                      )}
+                      <div className="pointer-events-none absolute bottom-full left-0 z-50 mb-2 w-60 rounded-lg bg-abyss p-3 text-xs text-ink-inverse opacity-0 shadow-lg transition-opacity duration-150 group-hover/tip:opacity-100">
+                        <div className="font-display text-sm tracking-wide uppercase">
+                          {block.tooltipHeading}
+                        </div>
+                        <div className="mt-1 space-y-0.5 text-ink-inverse/80">
+                          {block.tooltipLines.map((line, idx) => (
+                            <div key={idx}>{line}</div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
