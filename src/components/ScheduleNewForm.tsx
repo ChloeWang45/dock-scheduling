@@ -33,13 +33,13 @@ export default function ScheduleNewForm({
         <label className="label-text">
           Type
         </label>
-        <div className="flex items-center gap-1 rounded border border-ink/20 p-0.5 w-fit">
+        <div className="flex items-center gap-1 rounded-full border border-ink/20 p-1 w-fit">
           {(["booking", "event", "closure"] as const).map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => setType(t)}
-              className={`rounded px-4 py-1.5 text-sm capitalize ${
+              className={`rounded-full px-4 py-1.5 text-xs font-medium tracking-wide uppercase transition-colors duration-150 ${
                 type === t
                   ? "bg-wave text-ink-inverse"
                   : "text-ink/70 hover:bg-foam/60"

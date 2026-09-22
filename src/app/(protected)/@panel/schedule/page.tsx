@@ -135,7 +135,7 @@ export default async function SchedulePage({
 
       <ScheduleSearch q={q} type={activeFilter} />
 
-      <div className="mb-4 flex items-center gap-1 rounded border border-ink/20 p-0.5 w-fit">
+      <div className="mb-4 flex items-center gap-1 rounded-full border border-ink/20 p-1 w-fit">
         {FILTERS.map((f) => (
           <Link
             key={f.value}
@@ -143,7 +143,7 @@ export default async function SchedulePage({
               (f.value === "all" ? "/schedule" : `/schedule?type=${f.value}`) +
               (q ? `${f.value === "all" ? "?" : "&"}sq=${encodeURIComponent(q)}` : "")
             }
-            className={`rounded px-3 py-1 text-sm ${
+            className={`rounded-full px-4 py-1.5 text-xs font-medium tracking-wide uppercase transition-colors duration-150 ${
               activeFilter === f.value
                 ? "bg-wave text-ink-inverse"
                 : "text-ink/70 hover:bg-foam/60"

@@ -64,7 +64,7 @@ export default function NavRail({
                 }`}
               >
                 <Icon className="h-5 w-5 shrink-0" />
-                <span className="whitespace-nowrap text-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <span className="whitespace-nowrap text-xs font-medium tracking-wide uppercase opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                   {label}
                 </span>
               </Link>
@@ -94,7 +94,7 @@ export default function NavRail({
             className="flex w-full items-center gap-3 px-4 py-2.5 text-ink-inverse/70 transition-colors duration-150 hover:bg-white/10 hover:text-ink-inverse"
           >
             <ExitIcon className="h-5 w-5 shrink-0" />
-            <span className="whitespace-nowrap text-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <span className="whitespace-nowrap text-xs font-medium tracking-wide uppercase opacity-0 transition-opacity duration-200 group-hover:opacity-100">
               Sign out
             </span>
           </button>

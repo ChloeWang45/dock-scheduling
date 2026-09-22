@@ -1,4 +1,4 @@
-@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@700,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Red+Hat+Display:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -27,8 +27,8 @@
   --color-conflict: var(--color-conflict);
   --color-soundings: var(--color-soundings);
   --color-closure-fallback: var(--color-closure-fallback);
-  --font-sans: "General Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Red Hat Display", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
@@ -69,10 +69,10 @@ body {
     @apply w-full rounded border border-ink/20 bg-white px-3 py-2 text-sm text-ink placeholder-ink/40 transition-colors outline-none focus:border-wave focus:ring-2 focus:ring-wave/30;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded bg-wave px-4 py-2 text-sm font-medium text-ink-inverse transition-all duration-150 hover:-translate-y-px hover:bg-abyss disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
+    @apply inline-flex items-center justify-center rounded-full bg-wave px-5 py-2 text-xs font-medium tracking-wide text-ink-inverse uppercase transition-all duration-150 hover:-translate-y-px hover:bg-abyss disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded border border-ink/20 px-3 py-1.5 text-sm text-ink/80 transition-colors duration-150 hover:bg-foam/60 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-full border border-ink/25 px-4 py-1.5 text-xs font-medium tracking-wide text-ink/80 uppercase transition-colors duration-150 hover:bg-foam/60 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .link-action {
     @apply text-wave transition-colors duration-150 hover:text-abyss hover:underline;

@@ -37,12 +37,12 @@ export default function CalendarNav({ view, anchor }: { view: ViewType; anchor: 
           {formatRangeLabel(view, anchor)}
         </span>
       </div>
-      <div className="flex items-center gap-1 rounded border border-ink/20 p-0.5">
+      <div className="flex items-center gap-1 rounded-full border border-ink/20 p-1">
         {VIEWS.map((v) => (
           <Link
             key={v}
             href={hrefFor(v, anchor)}
-            className={`rounded px-3 py-1 text-sm capitalize ${
+            className={`rounded-full px-4 py-1.5 text-xs font-medium tracking-wide uppercase transition-colors duration-150 ${
               v === view
                 ? "bg-wave text-ink-inverse"
                 : "text-ink/70 hover:bg-foam/60"
